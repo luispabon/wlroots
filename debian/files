@@ -1,6 +1,0 @@
-libwlroots-dev_0.6.0-3~disco_amd64.deb libdevel optional
-libwlroots-examples-dbgsym_0.6.0-3~disco_amd64.ddeb debug optional automatic=yes
-libwlroots-examples_0.6.0-3~disco_amd64.deb libs optional
-libwlroots0-dbgsym_0.6.0-3~disco_amd64.ddeb debug optional automatic=yes
-libwlroots0_0.6.0-3~disco_amd64.deb libs optional
-wlroots_0.6.0-3~disco_amd64.buildinfo libs optional
