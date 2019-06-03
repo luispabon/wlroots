@@ -1,0 +1,3 @@
+shlibs:Depends=libc6 (>= 2.17), libgles2, libinput10 (>= 0.15.0), libpixman-1-0 (>= 0.25.2), libwayland-client0 (>= 1.9.91), libwayland-server0 (>= 1.14.91), libwlroots0, libxkbcommon0 (>= 0.7.0)
+misc:Depends=
+misc:Pre-Depends=
