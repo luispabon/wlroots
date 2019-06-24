@@ -217,7 +217,11 @@ void wlr_output_update_custom_mode(struct wlr_output *output, int32_t width,
 
 void wlr_output_set_transform(struct wlr_output *output,
 		enum wl_output_transform transform) {
-	output->impl->transform(output, transform);
+	if (output->transform == transform) {
+		return;
+	}
+
+	output->transform = transform;
 	output_update_matrix(output);
 
 	struct wl_resource *resource;
@@ -291,7 +295,7 @@ static void handle_display_destroy(struct wl_listener *listener, void *data) {
 
 void wlr_output_init(struct wlr_output *output, struct wlr_backend *backend,
 		const struct wlr_output_impl *impl, struct wl_display *display) {
-	assert(impl->attach_render && impl->commit && impl->transform);
+	assert(impl->attach_render && impl->commit);
 	if (impl->set_cursor || impl->move_cursor) {
 		assert(impl->set_cursor && impl->move_cursor);
 	}
@@ -398,12 +402,25 @@ struct wlr_output_mode *wlr_output_preferred_mode(struct wlr_output *output) {
 	return mode;
 }
 
+static void output_state_clear_buffer(struct wlr_output_state *state) {
+	if (!(state->committed & WLR_OUTPUT_STATE_BUFFER)) {
+		return;
+	}
+
+	wlr_buffer_unref(state->buffer);
+	state->buffer = NULL;
+
+	state->committed &= ~WLR_OUTPUT_STATE_BUFFER;
+}
+
 bool wlr_output_attach_render(struct wlr_output *output, int *buffer_age) {
 	if (!output->impl->attach_render(output, buffer_age)) {
 		return false;
 	}
 
+	output_state_clear_buffer(&output->pending);
 	output->pending.committed |= WLR_OUTPUT_STATE_BUFFER;
+	output->pending.buffer_type = WLR_OUTPUT_STATE_BUFFER_RENDER;
 	return true;
 }
 
@@ -429,8 +446,9 @@ void wlr_output_set_damage(struct wlr_output *output,
 }
 
 static void output_state_clear(struct wlr_output_state *state) {
-	state->committed = 0;
+	output_state_clear_buffer(state);
 	pixman_region32_clear(&state->damage);
+	state->committed = 0;
 }
 
 bool wlr_output_commit(struct wlr_output *output) {
@@ -458,6 +476,7 @@ bool wlr_output_commit(struct wlr_output *output) {
 	wlr_signal_emit_safe(&output->events.precommit, &event);
 
 	if (!output->impl->commit(output)) {
+		output_state_clear(&output->pending);
 		return false;
 	}
 
@@ -475,6 +494,36 @@ bool wlr_output_commit(struct wlr_output *output) {
 	output->needs_frame = false;
 	output_state_clear(&output->pending);
 	pixman_region32_clear(&output->damage);
+	return true;
+}
+
+bool wlr_output_attach_buffer(struct wlr_output *output,
+		struct wlr_buffer *buffer) {
+	if (!output->impl->attach_buffer) {
+		return false;
+	}
+	if (output->attach_render_locks > 0) {
+		return false;
+	}
+
+	// If the output has at least one software cursor, refuse to attach the
+	// buffer
+	struct wlr_output_cursor *cursor;
+	wl_list_for_each(cursor, &output->cursors, link) {
+		if (cursor->enabled && cursor->visible &&
+				cursor != output->hardware_cursor) {
+			return false;
+		}
+	}
+
+	if (!output->impl->attach_buffer(output, buffer)) {
+		return false;
+	}
+
+	output_state_clear_buffer(&output->pending);
+	output->pending.committed |= WLR_OUTPUT_STATE_BUFFER;
+	output->pending.buffer_type = WLR_OUTPUT_STATE_BUFFER_SCANOUT;
+	output->pending.buffer = wlr_buffer_ref(buffer);
 	return true;
 }
 
@@ -571,6 +620,18 @@ struct wlr_output *wlr_output_from_resource(struct wl_resource *resource) {
 	assert(wl_resource_instance_of(resource, &wl_output_interface,
 		&output_impl));
 	return wl_resource_get_user_data(resource);
+}
+
+void wlr_output_lock_attach_render(struct wlr_output *output, bool lock) {
+	if (lock) {
+		++output->attach_render_locks;
+	} else {
+		assert(output->attach_render_locks > 0);
+		--output->attach_render_locks;
+	}
+	wlr_log(WLR_DEBUG, "%s direct scan-out on output '%s' (locks: %d)",
+		lock ? "Disabling" : "Enabling", output->name,
+		output->attach_render_locks);
 }
 
 static void output_cursor_damage_whole(struct wlr_output_cursor *cursor);

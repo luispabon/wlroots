@@ -172,7 +172,8 @@ static bool atomic_crtc_set_cursor(struct wlr_drm_backend *drm,
 	atomic_begin(crtc, &atom);
 
 	if (bo) {
-		uint32_t fb_id = get_fb_for_bo(bo, plane->drm_format);
+		uint32_t fb_id =
+			get_fb_for_bo(bo, plane->drm_format, drm->addfb2_modifiers);
 		set_plane_props(&atom, plane, crtc->id, fb_id, false);
 	} else {
 		atomic_add(&atom, plane->id, plane->props.fb_id, 0);
@@ -210,11 +211,7 @@ static bool atomic_crtc_set_gamma(struct wlr_drm_backend *drm,
 		uint16_t *r, uint16_t *g, uint16_t *b) {
 	// Fallback to legacy gamma interface when gamma properties are not available
 	// (can happen on older Intel GPUs that support gamma but not degamma).
-	// TEMP: This is broken on AMDGPU. Provide a fallback to legacy until they
-	// get it fixed. Ref https://bugs.freedesktop.org/show_bug.cgi?id=107459
-	const char *no_atomic_str = getenv("WLR_DRM_NO_ATOMIC_GAMMA");
-	bool no_atomic = no_atomic_str != NULL && strcmp(no_atomic_str, "1") == 0;
-	if (crtc->props.gamma_lut == 0 || no_atomic) {
+	if (crtc->props.gamma_lut == 0) {
 		return legacy_iface.crtc_set_gamma(drm, crtc, size, r, g, b);
 	}
 
