@@ -1,3 +1,9 @@
+wlroots (0.7.0-pre-5-bb05617~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Thu, 18 Jul 2019 09:47:10 +0400
+
 wlroots (0.7.0-pre-4-df3f0ff~disco) disco; urgency=low
 
   * Rebuild
