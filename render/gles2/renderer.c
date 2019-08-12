@@ -157,17 +157,8 @@ static bool gles2_render_texture_with_matrix(struct wlr_renderer *wlr_renderer,
 	glBindTexture(target, tex_id);
 
 
-	/**
-#define GL_NEAREST                        0x2600
-#define GL_LINEAR                         0x2601
-#define GL_NEAREST_MIPMAP_NEAREST         0x2700
-#define GL_LINEAR_MIPMAP_NEAREST          0x2701
-#define GL_NEAREST_MIPMAP_LINEAR          0x2702
-#define GL_LINEAR_MIPMAP_LINEAR           0x2703
-	 */
 	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	// glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 
 	glUseProgram(shader->program);
 
