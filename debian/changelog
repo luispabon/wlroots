@@ -1,3 +1,9 @@
+wlroots (0.8.1-luis2~disco) disco; urgency=low
+
+  * Patch [0.8 94dd60f5] render/gles2: don't unset the current EGL surface when destroying texture
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 08 Oct 2019 09:47:10 +0400
+
 wlroots (0.8.1-luis1~disco) disco; urgency=low
 
   * Rebuild
