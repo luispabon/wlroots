@@ -1,0 +1,156 @@
+wlroots (0.9-luis-alpha2~disco) disco; urgency=low
+
+  * New release
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 03 Dec 2019 09:47:10 +0400
+
+wlroots (0.9-luis-alpha1~disco) disco; urgency=low
+
+  * Patch [0.8 94dd60f5] render/gles2: don't unset the current EGL surface when destroying texture
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Fri, 22 Nov 2019 09:47:10 +0400
+
+wlroots (0.8.1-luis2~disco) disco; urgency=low
+
+  * Patch [0.8 94dd60f5] render/gles2: don't unset the current EGL surface when destroying texture
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 08 Oct 2019 09:47:10 +0400
+
+wlroots (0.8.1-luis1~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 08 Oct 2019 09:47:10 +0400
+
+wlroots (0.7.0-luis1~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 27 Aug 2019 09:47:10 +0400
+
+wlroots (0.7.0-pre-6-76ef089~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 23 Jul 2019 09:47:10 +0400
+
+wlroots (0.7.0-pre-5-bb05617~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Thu, 18 Jul 2019 09:47:10 +0400
+
+wlroots (0.7.0-pre-4-df3f0ff~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Fri, 05 Jul 2019 09:47:10 +0400
+
+wlroots (0.7.0-pre-3-c2fb8a8~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Sun, 30 Jun 2019 09:47:10 +0400
+
+wlroots (0.7.0-pre-2-fb739b~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Sun, 30 Jun 2019 09:47:10 +0400
+
+wlroots (0.7.0-pre-1-46dc41~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 24 Jun 2019 09:47:10 +0400
+
+wlroots (0.6.0-3~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 20 May 2019 09:47:10 +0400
+
+wlroots (0.6.0-2~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 20 May 2019 09:42:22 +0400
+
+wlroots (0.6.0-1~disco) disco; urgency=low
+
+  * New upstream release
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 14 May 2019 10:08:17 +0400
+
+wlroots (0.5.0-1~disco) disco; urgency=low
+
+  * New upstream release
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 11 Mar 2019 20:28:18 +0400
+
+wlroots (0.4.1-1~disco) disco; urgency=low
+
+  * New upstream release
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Wed, 27 Feb 2019 20:38:15 +0400
+
+wlroots (0.3-2~disco) disco; urgency=low
+
+  * Rebuild for Disco
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 05 Feb 2019 13:36:22 +0400
+
+wlroots (0.3-1~disco) disco; urgency=low
+
+  * Rebuild for Cosmic
+
+ -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 05 Feb 2019 13:28:30 +0400
+
+wlroots (0.2-1) experimental; urgency=medium
+
+  * New upstream release
+  * [bb72a5c] d/control: Add Vcs-* URLs
+  * [1850149] d/control: Switch Vcs-* URLs to swaywm-team
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 01 Dec 2018 17:56:04 +0100
+
+wlroots (0.0.0~git20181009-1) experimental; urgency=medium
+
+  * New upstream git snapshot
+  * [7a6de38] libwlroots-dev: Depend on required dev packages based on the pc
+    file.
+    Thanks to Charles-David <droper@analphabet.me>
+  * [de444f4] Add minimal autopkgtests.  This ensures we can properly include
+    and link against libwlroots.
+  * [7411028] Drop rpath patch.  Not needed anymore
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 01 Dec 2018 17:55:56 +0100
+
+wlroots (0.0.0~git20180524-1) experimental; urgency=medium
+
+  * New upstream git snapshot
+  * [7976cdb] Drop empty usr/bin
+  * [6279466] Drop debian/rules template comments
+  * [177604f] Update copyright information
+  * [1f7ee13] gbp.conf: Use upstream/latest for upstream sources
+  * [1f9b1a3] gbp.conf: Use id-length
+
+ -- Guido Günther <agx@sigxcpu.org>  Thu, 24 May 2018 16:31:42 +0200
+
+wlroots (0.0.0~git20180223-1) experimental; urgency=medium
+
+  * New upstream snapshot
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 23 Feb 2018 10:19:02 +0100
+
+wlroots (0.0.0~git20180130-1) unstable; urgency=medium
+
+  * New upstream snapshot
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 23 Feb 2018 10:18:44 +0100
+
+wlroots (0.0.0~git20180126-1) unstable; urgency=medium
+
+  * Initial release (Closes: #888848)
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 26 Jan 2018 17:23:38 +0100
