@@ -8,3 +8,5 @@ tmp
 *.install
 tests
 source
+gbp.conf 
+README.source
