@@ -1,9 +1,9 @@
 project(
 	'wlroots',
 	'c',
-	version: '0.9.1',
+	version: '0.10.0',
 	license: 'MIT',
-	meson_version: '>=0.51.0',
+	meson_version: '>=0.51.2',
 	default_options: [
 		'c_std=c11',
 		'warning_level=2',
@@ -14,7 +14,7 @@ project(
 # Format of so_version is CURRENT, REVISION, AGE.
 # See: https://autotools.io/libtool/version.html
 # for a reference about clean library versioning.
-so_version = ['4', '8', '1']
+so_version = ['5', '9', '1']
 
 add_project_arguments([
 	'-DWLR_USE_UNSTABLE',
@@ -82,7 +82,6 @@ conf_data = configuration_data()
 conf_data.set10('WLR_HAS_LIBCAP', false)
 conf_data.set10('WLR_HAS_SYSTEMD', false)
 conf_data.set10('WLR_HAS_ELOGIND', false)
-conf_data.set10('WLR_HAS_RDP_BACKEND', false)
 conf_data.set10('WLR_HAS_X11_BACKEND', false)
 conf_data.set10('WLR_HAS_XWAYLAND', false)
 conf_data.set10('WLR_HAS_XCB_ERRORS', false)
@@ -176,7 +175,6 @@ summary = [
 	'     systemd: @0@'.format(conf_data.get('WLR_HAS_SYSTEMD', false)),
 	'     elogind: @0@'.format(conf_data.get('WLR_HAS_ELOGIND', false)),
 	'    xwayland: @0@'.format(conf_data.get('WLR_HAS_XWAYLAND', false)),
-	' rdp_backend: @0@'.format(conf_data.get('WLR_HAS_RDP_BACKEND', false)),
 	' x11_backend: @0@'.format(conf_data.get('WLR_HAS_X11_BACKEND', false)),
 	'   xcb-icccm: @0@'.format(conf_data.get('WLR_HAS_XCB_ICCCM', false)),
 	'  xcb-errors: @0@'.format(conf_data.get('WLR_HAS_XCB_ERRORS', false)),
@@ -185,7 +183,9 @@ summary = [
 ]
 message('\n'.join(summary))
 
-subdir('examples')
+if get_option('examples')
+	subdir('examples')
+endif
 
 pkgconfig = import('pkgconfig')
 pkgconfig.generate(lib_wlr,
