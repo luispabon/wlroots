@@ -1,8 +1,16 @@
+wlroots (0.10.0-luis2~disco) disco; urgency=low
+
+  * Backport "backend/drm: add env variable to disable modifiers"
+  * Backport "backend/drm: remove overzealous finish_drm_surface"
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Thu, 23 Jan 2020 09:47:10 +0400
+
 wlroots (0.10.0-luis1~disco) disco; urgency=low
 
   * New release
 
  -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Thu, 23 Jan 2020 09:47:10 +0400
+
 
 wlroots (0.9.1-luis1~disco) disco; urgency=low
 
