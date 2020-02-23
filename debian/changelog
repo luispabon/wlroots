@@ -1,3 +1,9 @@
+wlroots (0.10.0-luis3~disco) disco; urgency=low
+
+  * Backport a6288de "xwayland: ignore pointer focus changes" (fixes not being able to type on xwayland apps after coming off a menu)
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Sun, 23 Feb 2020 09:47:10 +0400
+
 wlroots (0.10.0-luis2~disco) disco; urgency=low
 
   * Backport "backend/drm: add env variable to disable modifiers"
