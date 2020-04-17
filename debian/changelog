@@ -1,4 +1,4 @@
-wlroots (0.10.0-luis3~disco) disco; urgency=low
+wlroots (0.10.0-luis3) disco; urgency=low
 
   * Backport a6288de "xwayland: ignore pointer focus changes" (fixes not being able to type on xwayland apps after coming off a menu)
 
