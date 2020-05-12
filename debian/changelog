@@ -2,7 +2,6 @@ wlroots (0.10.0-luis4) disco; urgency=low
 
   * Backport "wlr_surface_accepts_touch"
   * Backport "Fix error when reconnecting external display"
-  * Backport "backend/drm: don't have fallback atomic commit"
 
  -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 12 May 2020 09:47:10 +0400
 
