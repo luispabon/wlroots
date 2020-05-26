@@ -1,3 +1,9 @@
+wlroots (0.10.0-luis5) disco; urgency=low
+
+  * Backport "xwayland: send focus change event unconditionally"
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 26 May 2020 09:47:10 +0400
+
 wlroots (0.10.0-luis4) disco; urgency=low
 
   * Backport "wlr_surface_accepts_touch"
