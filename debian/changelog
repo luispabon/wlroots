@@ -1,3 +1,84 @@
+wlroots (0.10.99-luis1) disco; urgency=low
+
+  * wlroots pre 0.11
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Thu, 25 Jun 2020 09:47:10 +0400
+
+wlroots (0.10.0-luis5) disco; urgency=low
+
+  * Backport "xwayland: send focus change event unconditionally"
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 26 May 2020 09:47:10 +0400
+
+wlroots (0.10.0-luis4) disco; urgency=low
+
+  * Backport "wlr_surface_accepts_touch"
+  * Backport "Fix error when reconnecting external display"
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 12 May 2020 09:47:10 +0400
+
+wlroots (0.10.0-luis3) disco; urgency=low
+
+  * Backport a6288de "xwayland: ignore pointer focus changes" (fixes not being able to type on xwayland apps after coming off a menu)
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Sun, 23 Feb 2020 09:47:10 +0400
+
+wlroots (0.10.0-luis2~disco) disco; urgency=low
+
+  * Backport "backend/drm: add env variable to disable modifiers"
+  * Backport "backend/drm: remove overzealous finish_drm_surface"
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Fri, 07 Feb 2020 09:47:10 +0400
+
+wlroots (0.10.0-luis1~disco) disco; urgency=low
+
+  * New release
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Thu, 23 Jan 2020 09:47:10 +0400
+
+
+wlroots (0.9.1-luis1~disco) disco; urgency=low
+
+  * New release
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Wed, 08 Jan 2020 09:47:10 +0400
+
+wlroots (0.9.0-luis1~disco) disco; urgency=low
+
+  * New release
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Sat, 04 Jan 2020 09:47:10 +0400
+
+wlroots (0.9-luis-alpha2~disco) disco; urgency=low
+
+  * New release
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 03 Dec 2019 09:47:10 +0400
+
+wlroots (0.9-luis-alpha1~disco) disco; urgency=low
+
+  * Patch [0.8 94dd60f5] render/gles2: don't unset the current EGL surface when destroying texture
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Fri, 22 Nov 2019 09:47:10 +0400
+
+wlroots (0.8.1-luis2~disco) disco; urgency=low
+
+  * Patch [0.8 94dd60f5] render/gles2: don't unset the current EGL surface when destroying texture
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 08 Oct 2019 09:47:10 +0400
+
+wlroots (0.8.1-luis1~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 08 Oct 2019 09:47:10 +0400
+
+wlroots (0.7.0-luis1~disco) disco; urgency=low
+
+  * Rebuild
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 27 Aug 2019 09:47:10 +0400
+
 wlroots (0.7.0-pre-6-76ef089~disco) disco; urgency=low
 
   * Rebuild
