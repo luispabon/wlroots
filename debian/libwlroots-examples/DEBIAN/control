@@ -1,0 +1,16 @@
+Package: libwlroots-examples
+Source: wlroots
+Version: 0.10.99-luis1
+Architecture: amd64
+Maintainer: Sway and related packages team <team+swaywm@tracker.debian.org>
+Installed-Size: 397
+Depends: libc6 (>= 2.17), libgles2, libpng16-16 (>= 1.6.2-1), libwayland-client0 (>= 1.16), libwayland-server0 (>= 1.16), libwlroots5 (>= 0.10.99), libxkbcommon0 (>= 0.5.0)
+Section: libs
+Priority: optional
+Homepage: https://github.com/swaywm/wlroots
+Description: Modular wayland compositor library - binaries
+ wlroots is a set of pluggable, composable modules to build a Wayland
+ composior.
+ .
+ This package contains the reference compositor rootston and other
+ examples.

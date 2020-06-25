@@ -1,0 +1,14 @@
+Package: libwlroots5-dbgsym
+Package-Type: ddeb
+Source: wlroots
+Version: 0.10.99-luis1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Sway and related packages team <team+swaywm@tracker.debian.org>
+Installed-Size: 935
+Depends: libwlroots5 (= 0.10.99-luis1)
+Section: debug
+Priority: optional
+Multi-Arch: same
+Description: debug symbols for libwlroots5
+Build-Ids: 29481e6fff440cfecd41d9f7909bba027e822eaa

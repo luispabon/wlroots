@@ -4,158 +4,124 @@ wlroots (0.10.99-luis1) disco; urgency=low
 
  -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Thu, 25 Jun 2020 09:47:10 +0400
 
-wlroots (0.10.0-luis5) disco; urgency=low
+wlroots (0.10.1-1) unstable; urgency=medium
 
-  * Backport "xwayland: send focus change event unconditionally"
+  * New upstream version 0.10.1
+  * [e0d4333] Bump meson build-dep.
+    Thanks to Martin Michlmayr
+    (Closes: #954099)
+  * [2f4b173] Version build-depends according to meson.build.
+    This makes backporting simpler
+  * [6ef4e2d] Use Rules-Requires-Root
+  * [93ff8c3] Rediff patches
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 26 May 2020 09:47:10 +0400
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 27 Mar 2020 09:23:06 +0100
 
-wlroots (0.10.0-luis4) disco; urgency=low
+wlroots (0.10.0-3) unstable; urgency=medium
 
-  * Backport "wlr_surface_accepts_touch"
-  * Backport "Fix error when reconnecting external display"
+  * [0cc2c1d] Backport wlr-output-power-management.
+    These are straight cherry-picks from upstream master
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 12 May 2020 09:47:10 +0400
+ -- Guido Günther <agx@sigxcpu.org>  Sun, 01 Mar 2020 13:40:32 +0100
 
-wlroots (0.10.0-luis3) disco; urgency=low
+wlroots (0.10.0-2) unstable; urgency=medium
 
-  * Backport a6288de "xwayland: ignore pointer focus changes" (fixes not being able to type on xwayland apps after coming off a menu)
+  [ Birger Schacht ]
+  * Add libx11-xcb-dev and libxcb-xinput-dev to Dependencies
+    of libwlroots-dev (Closes: #951109)
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Sun, 23 Feb 2020 09:47:10 +0400
+ -- Birger Schacht <birger@rantanplan.org>  Sun, 16 Feb 2020 20:03:45 +0100
 
-wlroots (0.10.0-luis2~disco) disco; urgency=low
+wlroots (0.10.0-1) unstable; urgency=medium
 
-  * Backport "backend/drm: add env variable to disable modifiers"
-  * Backport "backend/drm: remove overzealous finish_drm_surface"
+  [ Jonas Meurer ]
+  * [dfb8ec6] d/gbp.conf: set 'pristine-tar = True'
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Fri, 07 Feb 2020 09:47:10 +0400
+  [ Guido Günther ]
+  * Upload to unstable (Closes: #947851)
+  * [4c3f687] Add watch file
+  * [88745ae] Switch to so version 5
 
-wlroots (0.10.0-luis1~disco) disco; urgency=low
+ -- Guido Günther <agx@sigxcpu.org>  Mon, 27 Jan 2020 11:51:37 +0100
 
-  * New release
+wlroots (0.8.1-1) experimental; urgency=medium
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Thu, 23 Jan 2020 09:47:10 +0400
+  * Bump shlibs version
+  * d/control: Remove trailing whitespace
+  * d/control: Remove trailing whitespace
+  * Update standards version to 4.4.1, no changes needed.
+  * Bump debhelper from old 10 to 12.
+  * Set debhelper-compat version in Build-Depends.
+  * Set upstream metadata fields: Repository, Repository-Browse.
+  * New upstream version 0.8.1
 
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 06 Dec 2019 12:37:11 +0100
 
-wlroots (0.9.1-luis1~disco) disco; urgency=low
+wlroots (0.7.0-2) experimental; urgency=medium
 
-  * New release
+  [ Birger Schacht ]
+  * [b6376e4] d/libwlroots3.shlibs: Bump version
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Wed, 08 Jan 2020 09:47:10 +0400
+  [ Guido Günther ]
+  * [85d31e8] mark autopkgtest as superficial
 
-wlroots (0.9.0-luis1~disco) disco; urgency=low
+ -- Birger Schacht <birger@rantanplan.org>  Wed, 18 Sep 2019 12:25:24 +0200
 
-  * New release
+wlroots (0.7.0-1) experimental; urgency=medium
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Sat, 04 Jan 2020 09:47:10 +0400
+  [ Guido Günther ]
+  * New upstream version 0.7.0 (Closes: #936081)
+  * [a62850e] Update examples
+    rootston and screenshot got dropped, there's screencopy now
 
-wlroots (0.9-luis-alpha2~disco) disco; urgency=low
+  [ Birger Schacht ]
+  * [caf3a84] d/copyright: Update since files got dropped
+  * [be3aa96] d/control: add libpng-dev to build-depends (for
+    examples/screencopy.c)
+  * [f972935] d/control: Set maintainer to team address and move Guido to
+    uploaders
+  * [1f69b85] d/control: Bump Standards-Version: no changes required
+  * [ea9aae9] d/control: add myself to uploaders
 
-  * New release
+ -- Birger Schacht <birger@rantanplan.org>  Wed, 11 Sep 2019 21:38:51 +0200
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 03 Dec 2019 09:47:10 +0400
+wlroots (0.6.0-1) experimental; urgency=medium
 
-wlroots (0.9-luis-alpha1~disco) disco; urgency=low
+  * New upstream version 0.6.0
+  * Adjust to soname bump
 
-  * Patch [0.8 94dd60f5] render/gles2: don't unset the current EGL surface when destroying texture
+ -- Guido Günther <agx@sigxcpu.org>  Thu, 16 May 2019 17:25:26 +0200
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Fri, 22 Nov 2019 09:47:10 +0400
+wlroots (0.5.0-2) experimental; urgency=medium
 
-wlroots (0.8.1-luis2~disco) disco; urgency=low
+  [ Birger Schacht ]
+  * [3fa04fe] Update copyright file
 
-  * Patch [0.8 94dd60f5] render/gles2: don't unset the current EGL surface when destroying texture
+ -- Guido Günther <agx@sigxcpu.org>  Tue, 23 Apr 2019 09:46:18 +0200
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 08 Oct 2019 09:47:10 +0400
+wlroots (0.5.0-1) experimental; urgency=medium
 
-wlroots (0.8.1-luis1~disco) disco; urgency=low
+  * New upstream version 0.5.0
+  * [0f1aaa4] Adjust to upstream soname bump
 
-  * Rebuild
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 22 Mar 2019 13:27:29 +0100
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 08 Oct 2019 09:47:10 +0400
+wlroots (0.4.1-1) experimental; urgency=medium
 
-wlroots (0.7.0-luis1~disco) disco; urgency=low
+  * New upstream version 0.4.1
+  * [109f084] Add shlibs file.  Upstream intends to bump so names on ABI
+    breaks. (Closes: #921884)
+  * [56e169d] Rename library package due to soname bump
+  * [1612b99] Bump standards version to 4.3.0
+  * [1230e30] d/copyright: Update since some code got dropped
 
-  * Rebuild
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 01 Mar 2019 11:39:22 +0100
 
- -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Tue, 27 Aug 2019 09:47:10 +0400
+wlroots (0.3-1) experimental; urgency=medium
 
-wlroots (0.7.0-pre-6-76ef089~disco) disco; urgency=low
+  * New upstream version 0.3
 
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 23 Jul 2019 09:47:10 +0400
-
-wlroots (0.7.0-pre-5-bb05617~disco) disco; urgency=low
-
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Thu, 18 Jul 2019 09:47:10 +0400
-
-wlroots (0.7.0-pre-4-df3f0ff~disco) disco; urgency=low
-
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Fri, 05 Jul 2019 09:47:10 +0400
-
-wlroots (0.7.0-pre-3-c2fb8a8~disco) disco; urgency=low
-
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Sun, 30 Jun 2019 09:47:10 +0400
-
-wlroots (0.7.0-pre-2-fb739b~disco) disco; urgency=low
-
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Sun, 30 Jun 2019 09:47:10 +0400
-
-wlroots (0.7.0-pre-1-46dc41~disco) disco; urgency=low
-
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 24 Jun 2019 09:47:10 +0400
-
-wlroots (0.6.0-3~disco) disco; urgency=low
-
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 20 May 2019 09:47:10 +0400
-
-wlroots (0.6.0-2~disco) disco; urgency=low
-
-  * Rebuild
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 20 May 2019 09:42:22 +0400
-
-wlroots (0.6.0-1~disco) disco; urgency=low
-
-  * New upstream release
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 14 May 2019 10:08:17 +0400
-
-wlroots (0.5.0-1~disco) disco; urgency=low
-
-  * New upstream release
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Mon, 11 Mar 2019 20:28:18 +0400
-
-wlroots (0.4.1-1~disco) disco; urgency=low
-
-  * New upstream release
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Wed, 27 Feb 2019 20:38:15 +0400
-
-wlroots (0.3-2~disco) disco; urgency=low
-
-  * Rebuild for Disco
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 05 Feb 2019 13:36:22 +0400
-
-wlroots (0.3-1~disco) disco; urgency=low
-
-  * Rebuild for Cosmic
-
- -- Aleksey Samoilov <samoilov.lex@gmail.com>  Tue, 05 Feb 2019 13:28:30 +0400
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 08 Feb 2019 14:37:15 +0100
 
 wlroots (0.2-1) experimental; urgency=medium
 

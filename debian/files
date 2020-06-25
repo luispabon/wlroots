@@ -1,0 +1,6 @@
+libwlroots-dev_0.10.99-luis1_amd64.deb libdevel optional
+libwlroots-examples-dbgsym_0.10.99-luis1_amd64.ddeb debug optional automatic=yes
+libwlroots-examples_0.10.99-luis1_amd64.deb libs optional
+libwlroots5-dbgsym_0.10.99-luis1_amd64.ddeb debug optional automatic=yes
+libwlroots5_0.10.99-luis1_amd64.deb libs optional
+wlroots_0.10.99-luis1_amd64.buildinfo libs optional

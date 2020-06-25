@@ -1,0 +1,13 @@
+Package: libwlroots-examples-dbgsym
+Package-Type: ddeb
+Source: wlroots
+Version: 0.10.99-luis1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Sway and related packages team <team+swaywm@tracker.debian.org>
+Installed-Size: 169
+Depends: libwlroots-examples (= 0.10.99-luis1)
+Section: debug
+Priority: optional
+Description: debug symbols for libwlroots-examples
+Build-Ids: 04d6c0861c1f9dc1efa35f5a865db5e40ad3ec3e 179d8f9157e47c7f23a1c1ceee9a42a8ae9a3759 4d77c5564684971697bec4249578845a195a3227 8ed8873b41c6a176daaa7ae7cd4f8566830e2e05 9631c22d7ccfd5f9ccbb3d1d02159db794c135e4 a514f5e1168692c0fbf80c2dae09b8ac0b8d79be d02dca2d869225327afbed2f8d8589ba6e857368 d54079acee6c40b6108d39d4b11d1fb55d351bce f13e1184f866aaafc39cf95c3769e2a9aef8c86b

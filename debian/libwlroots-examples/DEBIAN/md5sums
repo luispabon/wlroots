@@ -1,0 +1,11 @@
+b67e79acd574f8e5aee9cda6c40f4b17  usr/lib/wlroots/idle
+1c4b837f180f39e85395e949a26e6d7c  usr/lib/wlroots/multi-pointer
+10c8d62fcb41bb37804458868c5fae57  usr/lib/wlroots/output-layout
+fa001afe8eb41994b8b735a9fa7bdfa3  usr/lib/wlroots/pointer
+9568908a75a4c700bd341365c8cf8397  usr/lib/wlroots/rotation
+1ace6491b4b155cb833ae5a0cb46d238  usr/lib/wlroots/screencopy
+a10b05bb105a4c3c248ab050c32f1b33  usr/lib/wlroots/simple
+0e7daa88849d9c812c600a4327ed4c26  usr/lib/wlroots/tablet
+ebf982395981cf20e8540ce9684612a6  usr/lib/wlroots/touch
+5fe6df8ed686416c66330fd6cc35180b  usr/share/doc/libwlroots-examples/changelog.Debian.gz
+3007393f194b46eb8a66e087b6a67292  usr/share/doc/libwlroots-examples/copyright
