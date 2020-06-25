@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_input_device.h>
 #include <wlr/util/log.h>
 #include "types/wlr_seat.h"
@@ -101,6 +101,7 @@ static void touch_point_destroy(struct wlr_touch_point *point) {
 
 	touch_point_clear_focus(point);
 	wl_list_remove(&point->surface_destroy.link);
+	wl_list_remove(&point->client_destroy.link);
 	wl_list_remove(&point->link);
 	free(point);
 }
@@ -113,6 +114,13 @@ static void touch_point_handle_surface_destroy(struct wl_listener *listener,
 	point->surface = NULL;
 	wl_list_remove(&point->surface_destroy.link);
 	wl_list_init(&point->surface_destroy.link);
+}
+
+static void touch_point_handle_client_destroy(struct wl_listener *listener,
+		void *data) {
+	struct wlr_touch_point *point =
+		wl_container_of(listener, point, client_destroy);
+	touch_point_destroy(point);
 }
 
 static struct wlr_touch_point *touch_point_create(
@@ -143,7 +151,8 @@ static struct wlr_touch_point *touch_point_create(
 
 	wl_signal_add(&surface->events.destroy, &point->surface_destroy);
 	point->surface_destroy.notify = touch_point_handle_surface_destroy;
-
+	wl_signal_add(&client->events.destroy, &point->client_destroy);
+	point->client_destroy.notify = touch_point_handle_client_destroy;
 	wl_list_insert(&seat->touch_state.touch_points, &point->link);
 
 	return point;
@@ -174,6 +183,11 @@ uint32_t wlr_seat_touch_notify_down(struct wlr_seat *seat,
 	}
 
 	uint32_t serial = grab->interface->down(grab, time, point);
+
+	if (!serial) {
+		touch_point_destroy(point);
+		return 0;
+	}
 
 	if (serial && wlr_seat_touch_num_points(seat) == 1) {
 		seat->touch_state.grab_serial = serial;
@@ -352,6 +366,10 @@ void seat_client_create_touch(struct wlr_seat_client *seat_client,
 	wl_resource_set_implementation(resource, &touch_impl, seat_client,
 		&touch_handle_resource_destroy);
 	wl_list_insert(&seat_client->touches, wl_resource_get_link(resource));
+
+	if ((seat_client->seat->capabilities & WL_SEAT_CAPABILITY_TOUCH) == 0) {
+		wl_resource_set_user_data(resource, NULL);
+	}
 }
 
 void seat_client_destroy_touch(struct wl_resource *resource) {
@@ -388,4 +406,13 @@ bool wlr_seat_validate_touch_grab_serial(struct wlr_seat *seat,
 	wlr_log(WLR_DEBUG, "Touch grab serial validation failed: "
 		"invalid origin surface");
 	return false;
+}
+
+bool wlr_surface_accepts_touch(struct wlr_seat *wlr_seat, struct wlr_surface *surface) {
+	struct wl_client *client = wl_resource_get_client(surface->resource);
+	struct wlr_seat_client *seat_client = wlr_seat_client_for_wl_client(wlr_seat, client);
+	if (!seat_client) {
+		return false;
+	}
+	return !wl_list_empty(&seat_client->touches);
 }

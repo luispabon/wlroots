@@ -10,7 +10,7 @@
 #define WLR_TYPES_WLR_OUTPUT_MANAGEMENT_V1_H
 
 #include <stdbool.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_output.h>
 
 struct wlr_output_manager_v1 {
@@ -20,6 +20,7 @@ struct wlr_output_manager_v1 {
 
 	struct wl_list heads; // wlr_output_head_v1::link
 	uint32_t serial;
+	bool current_configuration_dirty;
 
 	struct {
 		/**

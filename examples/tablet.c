@@ -6,8 +6,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <wayland-server-protocol.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/backend.h>
 #include <wlr/backend/session.h>
 #include <wlr/render/wlr_renderer.h>
@@ -228,14 +227,14 @@ static void tablet_pad_destroy_notify(struct wl_listener *listener, void *data) 
 	free(pstate);
 }
 
-void output_remove_notify(struct wl_listener *listener, void *data) {
+static void output_remove_notify(struct wl_listener *listener, void *data) {
 	struct sample_output *sample_output = wl_container_of(listener, sample_output, destroy);
 	wl_list_remove(&sample_output->frame.link);
 	wl_list_remove(&sample_output->destroy.link);
 	free(sample_output);
 }
 
-void new_output_notify(struct wl_listener *listener, void *data) {
+static void new_output_notify(struct wl_listener *listener, void *data) {
 	struct wlr_output *output = data;
 	struct sample_state *sample = wl_container_of(listener, sample, new_output);
 	struct sample_output *sample_output = calloc(1, sizeof(struct sample_output));
@@ -249,9 +248,11 @@ void new_output_notify(struct wl_listener *listener, void *data) {
 	sample_output->frame.notify = output_frame_notify;
 	wl_signal_add(&output->events.destroy, &sample_output->destroy);
 	sample_output->destroy.notify = output_remove_notify;
+
+	wlr_output_commit(output);
 }
 
-void keyboard_key_notify(struct wl_listener *listener, void *data) {
+static void keyboard_key_notify(struct wl_listener *listener, void *data) {
 	struct sample_keyboard *keyboard = wl_container_of(listener, keyboard, key);
 	struct sample_state *sample = keyboard->sample;
 	struct wlr_event_keyboard_key *event = data;
@@ -267,14 +268,14 @@ void keyboard_key_notify(struct wl_listener *listener, void *data) {
 	}
 }
 
-void keyboard_destroy_notify(struct wl_listener *listener, void *data) {
+static void keyboard_destroy_notify(struct wl_listener *listener, void *data) {
 	struct sample_keyboard *keyboard = wl_container_of(listener, keyboard, destroy);
 	wl_list_remove(&keyboard->destroy.link);
 	wl_list_remove(&keyboard->key.link);
 	free(keyboard);
 }
 
-void new_input_notify(struct wl_listener *listener, void *data) {
+static void new_input_notify(struct wl_listener *listener, void *data) {
 	struct wlr_input_device *device = data;
 	struct sample_state *sample = wl_container_of(listener, sample, new_input);
 	switch (device->type) {

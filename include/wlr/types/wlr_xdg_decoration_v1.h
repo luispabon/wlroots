@@ -1,7 +1,7 @@
 #ifndef WLR_TYPES_WLR_XDG_DECORATION_V1
 #define WLR_TYPES_WLR_XDG_DECORATION_V1
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_xdg_shell.h>
 
 enum wlr_xdg_toplevel_decoration_v1_mode {
@@ -12,7 +12,6 @@ enum wlr_xdg_toplevel_decoration_v1_mode {
 
 struct wlr_xdg_decoration_manager_v1 {
 	struct wl_global *global;
-	struct wl_list resources;
 	struct wl_list decorations; // wlr_xdg_toplevel_decoration::link
 
 	struct wl_listener display_destroy;
@@ -59,8 +58,6 @@ struct wlr_xdg_toplevel_decoration_v1 {
 
 struct wlr_xdg_decoration_manager_v1 *
 	wlr_xdg_decoration_manager_v1_create(struct wl_display *display);
-void wlr_xdg_decoration_manager_v1_destroy(
-	struct wlr_xdg_decoration_manager_v1 *manager);
 
 uint32_t wlr_xdg_toplevel_decoration_v1_set_mode(
 	struct wlr_xdg_toplevel_decoration_v1 *decoration,

@@ -3,7 +3,7 @@
 #include <pixman.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_box.h>
 #include <wlr/types/wlr_pointer_constraints_v1.h>
 #include <wlr/types/wlr_region.h>
@@ -116,6 +116,7 @@ static void pointer_constraint_commit(
 	}
 	constraint->current.committed |= constraint->pending.committed;
 
+	bool updated_region = !!constraint->pending.committed;
 	constraint->pending.committed = 0;
 
 	pixman_region32_clear(&constraint->region);
@@ -125,6 +126,10 @@ static void pointer_constraint_commit(
 	} else {
 		pixman_region32_copy(&constraint->region,
 			&constraint->surface->input_region);
+	}
+
+	if (updated_region) {
+		wlr_signal_emit_safe(&constraint->events.set_region, NULL);
 	}
 }
 
@@ -209,6 +214,7 @@ static void pointer_constraint_create(struct wl_client *client,
 	constraint->type = type;
 	constraint->pointer_constraints = pointer_constraints;
 
+	wl_signal_init(&constraint->events.set_region);
 	wl_signal_init(&constraint->events.destroy);
 
 	pixman_region32_init(&constraint->region);
@@ -267,10 +273,6 @@ static const struct zwp_pointer_constraints_v1_interface
 	.confine_pointer = pointer_constraints_confine_pointer,
 };
 
-static void pointer_constraints_destroy(struct wl_resource *resource) {
-	wl_list_remove(wl_resource_get_link(resource));
-}
-
 static void pointer_constraints_bind(struct wl_client *client, void *data,
 		uint32_t version, uint32_t id) {
 	struct wlr_pointer_constraints_v1 *pointer_constraints = data;
@@ -283,17 +285,22 @@ static void pointer_constraints_bind(struct wl_client *client, void *data,
 		return;
 	}
 
-	wl_list_insert(&pointer_constraints->resources,
-		wl_resource_get_link(resource));
 	wl_resource_set_implementation(resource, &pointer_constraints_impl,
-		pointer_constraints, pointer_constraints_destroy);
+		pointer_constraints, NULL);
+}
+
+static void handle_display_destroy(struct wl_listener *listener, void *data) {
+	struct wlr_pointer_constraints_v1 *pointer_constraints =
+		wl_container_of(listener, pointer_constraints, display_destroy);
+	wl_list_remove(&pointer_constraints->display_destroy.link);
+	wl_global_destroy(pointer_constraints->global);
+	free(pointer_constraints);
 }
 
 struct wlr_pointer_constraints_v1 *wlr_pointer_constraints_v1_create(
 		struct wl_display *display) {
 	struct wlr_pointer_constraints_v1 *pointer_constraints =
 		calloc(1, sizeof(*pointer_constraints));
-
 	if (!pointer_constraints) {
 		return NULL;
 	}
@@ -307,29 +314,14 @@ struct wlr_pointer_constraints_v1 *wlr_pointer_constraints_v1_create(
 	}
 	pointer_constraints->global = wl_global;
 
-	wl_list_init(&pointer_constraints->resources);
 	wl_list_init(&pointer_constraints->constraints);
 	wl_signal_init(&pointer_constraints->events.new_constraint);
 
+	pointer_constraints->display_destroy.notify = handle_display_destroy;
+	wl_display_add_destroy_listener(display,
+		&pointer_constraints->display_destroy);
+
 	return pointer_constraints;
-}
-
-void wlr_pointer_constraints_v1_destroy(
-		struct wlr_pointer_constraints_v1 *pointer_constraints) {
-	struct wl_resource *resource, *_tmp_res;
-	wl_resource_for_each_safe(resource, _tmp_res,
-			&pointer_constraints->resources) {
-		wl_resource_destroy(resource);
-	}
-
-	struct wlr_pointer_constraint_v1 *constraint, *_tmp_cons;
-	wl_list_for_each_safe(constraint, _tmp_cons,
-			&pointer_constraints->constraints, link) {
-		wl_resource_destroy(constraint->resource);
-	}
-
-	wl_global_destroy(pointer_constraints->global);
-	free(pointer_constraints);
 }
 
 struct wlr_pointer_constraint_v1 *

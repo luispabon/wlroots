@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/backend/session.h>
 #include <wlr/backend/session/interface.h>
 #include <wlr/config.h>
@@ -197,6 +197,7 @@ static struct wlr_device *find_device(struct wlr_session *session, int fd) {
 
 	wlr_log(WLR_ERROR, "Tried to use fd %d not opened by session", fd);
 	assert(0);
+	return NULL;
 }
 
 void wlr_session_close_file(struct wlr_session *session, int fd) {
@@ -287,11 +288,6 @@ size_t wlr_session_find_gpus(struct wlr_session *session,
 		return explicit_find_gpus(session, ret_len, ret, explicit);
 	}
 
-#ifdef __FreeBSD__
-	// XXX: libudev-devd does not return any GPUs (yet?)
-	return explicit_find_gpus(session, ret_len, ret, "/dev/drm/0");
-#else
-
 	struct udev_enumerate *en = udev_enumerate_new(session->udev);
 	if (!en) {
 		wlr_log(WLR_ERROR, "Failed to create udev enumeration");
@@ -359,5 +355,4 @@ size_t wlr_session_find_gpus(struct wlr_session *session,
 	udev_enumerate_unref(en);
 
 	return i;
-#endif
 }

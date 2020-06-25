@@ -2,7 +2,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/interfaces/wlr_output.h>
 #include <wlr/types/wlr_gamma_control_v1.h>
 #include <wlr/types/wlr_output.h>
@@ -105,12 +105,15 @@ static void gamma_control_handle_set_gamma(struct wl_client *client,
 	uint16_t *g = table + ramp_size;
 	uint16_t *b = table + 2 * ramp_size;
 
-	bool ok = wlr_output_set_gamma(gamma_control->output, ramp_size, r, g, b);
-	if (!ok) {
+	wlr_output_set_gamma(gamma_control->output, ramp_size, r, g, b);
+	if (!wlr_output_test(gamma_control->output)) {
 		gamma_control_send_failed(gamma_control);
 		goto error_table;
 	}
 	free(table);
+
+	// Gamma LUT will be applied on next output commit
+	wlr_output_schedule_frame(gamma_control->output);
 
 	return;
 
@@ -161,6 +164,13 @@ static void gamma_control_manager_get_gamma_control(struct wl_client *client,
 	wl_resource_set_implementation(gamma_control->resource, &gamma_control_impl,
 		gamma_control, gamma_control_handle_resource_destroy);
 
+	if (output == NULL) {
+		wl_resource_set_user_data(gamma_control->resource, NULL);
+		zwlr_gamma_control_v1_send_failed(gamma_control->resource);
+		free(gamma_control);
+		return;
+	}
+
 	wl_signal_add(&output->events.destroy,
 		&gamma_control->output_destroy_listener);
 	gamma_control->output_destroy_listener.notify =
@@ -168,7 +178,8 @@ static void gamma_control_manager_get_gamma_control(struct wl_client *client,
 
 	wl_list_init(&gamma_control->link);
 
-	if (!output->impl->set_gamma) {
+	size_t gamma_size = wlr_output_get_gamma_size(output);
+	if (gamma_size == 0) {
 		zwlr_gamma_control_v1_send_failed(gamma_control->resource);
 		gamma_control_destroy(gamma_control);
 		return;
@@ -185,8 +196,7 @@ static void gamma_control_manager_get_gamma_control(struct wl_client *client,
 
 	wl_list_remove(&gamma_control->link);
 	wl_list_insert(&manager->controls, &gamma_control->link);
-	zwlr_gamma_control_v1_send_gamma_size(gamma_control->resource,
-		wlr_output_get_gamma_size(output));
+	zwlr_gamma_control_v1_send_gamma_size(gamma_control->resource, gamma_size);
 }
 
 static void gamma_control_manager_destroy(struct wl_client *client,
@@ -200,11 +210,6 @@ static const struct zwlr_gamma_control_manager_v1_interface
 	.destroy = gamma_control_manager_destroy,
 };
 
-static void gamma_control_manager_handle_resource_destroy(
-		struct wl_resource *resource) {
-	wl_list_remove(wl_resource_get_link(resource));
-}
-
 static void gamma_control_manager_bind(struct wl_client *client, void *data,
 		uint32_t version, uint32_t id) {
 	struct wlr_gamma_control_manager_v1 *manager = data;
@@ -216,33 +221,16 @@ static void gamma_control_manager_bind(struct wl_client *client, void *data,
 		return;
 	}
 	wl_resource_set_implementation(resource, &gamma_control_manager_impl,
-		manager, gamma_control_manager_handle_resource_destroy);
-	wl_list_insert(&manager->resources, wl_resource_get_link(resource));
-}
-
-void wlr_gamma_control_manager_v1_destroy(
-		struct wlr_gamma_control_manager_v1 *manager) {
-	if (!manager) {
-		return;
-	}
-	struct wlr_gamma_control_v1 *gamma_control, *tmp;
-	wl_list_for_each_safe(gamma_control, tmp, &manager->controls, link) {
-		wl_resource_destroy(gamma_control->resource);
-	}
-	wlr_signal_emit_safe(&manager->events.destroy, manager);
-	wl_list_remove(&manager->display_destroy.link);
-	struct wl_resource *resource, *resource_tmp;
-	wl_resource_for_each_safe(resource, resource_tmp, &manager->resources) {
-		wl_resource_destroy(resource);
-	}
-	wl_global_destroy(manager->global);
-	free(manager);
+		manager, NULL);
 }
 
 static void handle_display_destroy(struct wl_listener *listener, void *data) {
 	struct wlr_gamma_control_manager_v1 *manager =
 		wl_container_of(listener, manager, display_destroy);
-	wlr_gamma_control_manager_v1_destroy(manager);
+	wlr_signal_emit_safe(&manager->events.destroy, manager);
+	wl_list_remove(&manager->display_destroy.link);
+	wl_global_destroy(manager->global);
+	free(manager);
 }
 
 struct wlr_gamma_control_manager_v1 *wlr_gamma_control_manager_v1_create(
@@ -262,7 +250,6 @@ struct wlr_gamma_control_manager_v1 *wlr_gamma_control_manager_v1_create(
 	}
 
 	wl_signal_init(&manager->events.destroy);
-	wl_list_init(&manager->resources);
 	wl_list_init(&manager->controls);
 
 	manager->display_destroy.notify = handle_display_destroy;

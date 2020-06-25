@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/backend/interface.h>
 #include <wlr/backend/session.h>
 #include <wlr/interfaces/wlr_output.h>
@@ -44,6 +44,7 @@ static void backend_destroy(struct wlr_backend *backend) {
 	wlr_signal_emit_safe(&backend->events.destroy, backend);
 
 	wl_list_remove(&drm->display_destroy.link);
+	wl_list_remove(&drm->session_destroy.link);
 	wl_list_remove(&drm->session_signal.link);
 	wl_list_remove(&drm->drm_invalidated.link);
 
@@ -92,31 +93,10 @@ static void session_signal(struct wl_listener *listener, void *data) {
 
 		struct wlr_drm_connector *conn;
 		wl_list_for_each(conn, &drm->outputs, link){
-			if (conn->output.enabled) {
-				drm_connector_set_mode(&conn->output,
-						conn->output.current_mode);
+			if (conn->output.enabled && conn->output.current_mode != NULL) {
+				drm_connector_set_mode(conn, conn->output.current_mode);
 			} else {
-				enable_drm_connector(&conn->output, false);
-			}
-
-			if (!conn->crtc) {
-				continue;
-			}
-
-			struct wlr_drm_plane *plane = conn->crtc->cursor;
-			drm->iface->crtc_set_cursor(drm, conn->crtc,
-				(plane && plane->cursor_enabled) ? plane->surf.back : NULL);
-			drm->iface->crtc_move_cursor(drm, conn->crtc, conn->cursor_x,
-				conn->cursor_y);
-
-			if (conn->crtc->gamma_table != NULL) {
-				size_t size = conn->crtc->gamma_table_size;
-				uint16_t *r = conn->crtc->gamma_table;
-				uint16_t *g = conn->crtc->gamma_table + size;
-				uint16_t *b = conn->crtc->gamma_table + 2 * size;
-				drm->iface->crtc_set_gamma(drm, conn->crtc, size, r, g, b);
-			} else {
-				set_drm_connector_gamma(&conn->output, 0, NULL, NULL, NULL);
+				drm_connector_set_mode(conn, NULL);
 			}
 		}
 	} else {
@@ -133,6 +113,12 @@ static void drm_invalidated(struct wl_listener *listener, void *data) {
 	free(name);
 
 	scan_drm_connectors(drm);
+}
+
+static void handle_session_destroy(struct wl_listener *listener, void *data) {
+	struct wlr_drm_backend *drm =
+		wl_container_of(listener, drm, session_destroy);
+	backend_destroy(&drm->backend);
 }
 
 static void handle_display_destroy(struct wl_listener *listener, void *data) {
@@ -196,6 +182,9 @@ struct wlr_backend *wlr_drm_backend_create(struct wl_display *display,
 		wlr_log(WLR_ERROR, "Failed to initialize renderer");
 		goto error_event;
 	}
+
+	drm->session_destroy.notify = handle_session_destroy;
+	wl_signal_add(&session->events.destroy, &drm->session_destroy);
 
 	drm->display_destroy.notify = handle_display_destroy;
 	wl_display_add_destroy_listener(display, &drm->display_destroy);

@@ -242,14 +242,12 @@ at least one struct for each interface in the protocol. For instance,
 ### Globals
 
 Global interfaces generally have public constructors and destructors. Their
-struct has a field holding the `wl_global` itself, a list of resources clients
-created by binding to the global, a destroy signal and a `wl_display` destroy
-listener. Example:
+struct has a field holding the `wl_global` itself, a destroy signal and a
+`wl_display` destroy listener. Example:
 
 ```c
 struct wlr_compositor {
 	struct wl_global *global;
-	struct wl_list resources;
 	…
 
 	struct wl_listener display_destroy;
@@ -262,8 +260,9 @@ struct wlr_compositor {
 ```
 
 When the destructor is called, it should emit the destroy signal, remove the
-display destroy listener, destroy the `wl_global`, destroy all bound resources
-and then destroy the struct.
+display destroy listener, destroy the `wl_global` and then destroy the struct.
+The destructor can assume all clients and resources have been already
+destroyed.
 
 ### Resources
 
@@ -285,13 +284,22 @@ struct wlr_surface *wlr_surface_from_resource(struct wl_resource *resource) {
 }
 ```
 
+If a pointer to a `wl_resource` is stored, a resource destroy handler needs to
+be registered to clean it up. libwayland will automatically destroy resources
+in an arbitrary order when a client is disconnected, the compositor must handle
+this correctly.
+
 ### Destroying resources
 
 Object structs should only be destroyed when their resource is destroyed, ie.
 in the resource destroy handler (set with `wl_resource_set_implementation`).
-Destructor requests should only call `wl_resource_destroy`.
 
-The compositor should not destroy resources on its own.
+- If the object has a destructor request: the request handler should just call
+  `wl_resource_destroy` and do nothing else. The compositor must not destroy
+  resources on its own outside the destructor request handler.
+- If the protocol specifies that an object is destroyed when an event is sent:
+  it's the only case where the compositor is allowed to send the event and then
+  call `wl_resource_destroy`. An example of this is `wl_callback`.
 
 ### Inert resources
 

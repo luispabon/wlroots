@@ -17,68 +17,67 @@
 #include "xwayland/xwm.h"
 
 const char *atom_map[ATOM_LAST] = {
-	"WL_SURFACE_ID",
-	"WM_DELETE_WINDOW",
-	"WM_PROTOCOLS",
-	"WM_HINTS",
-	"WM_NORMAL_HINTS",
-	"WM_SIZE_HINTS",
-	"WM_WINDOW_ROLE",
-	"_MOTIF_WM_HINTS",
-	"UTF8_STRING",
-	"WM_S0",
-	"_NET_SUPPORTED",
-	"_NET_WM_CM_S0",
-	"_NET_WM_PID",
-	"_NET_WM_NAME",
-	"_NET_WM_STATE",
-	"_NET_WM_WINDOW_TYPE",
-	"WM_TAKE_FOCUS",
-	"WINDOW",
-	"_NET_ACTIVE_WINDOW",
-	"_NET_WM_MOVERESIZE",
-	"_NET_WM_NAME",
-	"_NET_SUPPORTING_WM_CHECK",
-	"_NET_WM_STATE_MODAL",
-	"_NET_WM_STATE_FULLSCREEN",
-	"_NET_WM_STATE_MAXIMIZED_VERT",
-	"_NET_WM_STATE_MAXIMIZED_HORZ",
-	"_NET_WM_PING",
-	"WM_STATE",
-	"CLIPBOARD",
-	"PRIMARY",
-	"_WL_SELECTION",
-	"TARGETS",
-	"CLIPBOARD_MANAGER",
-	"INCR",
-	"TEXT",
-	"TIMESTAMP",
-	"DELETE",
-	"_NET_WM_WINDOW_TYPE_NORMAL",
-	"_NET_WM_WINDOW_TYPE_UTILITY",
-	"_NET_WM_WINDOW_TYPE_TOOLTIP",
-	"_NET_WM_WINDOW_TYPE_DND",
-	"_NET_WM_WINDOW_TYPE_DROPDOWN_MENU",
-	"_NET_WM_WINDOW_TYPE_POPUP_MENU",
-	"_NET_WM_WINDOW_TYPE_COMBO",
-	"_NET_WM_WINDOW_TYPE_MENU",
-	"_NET_WM_WINDOW_TYPE_NOTIFICATION",
-	"_NET_WM_WINDOW_TYPE_SPLASH",
-	"XdndSelection",
-	"XdndAware",
-	"XdndStatus",
-	"XdndPosition",
-	"XdndEnter",
-	"XdndLeave",
-	"XdndDrop",
-	"XdndFinished",
-	"XdndProxy",
-	"XdndTypeList",
-	"XdndActionMove",
-	"XdndActionCopy",
-	"XdndActionAsk",
-	"XdndActionPrivate",
-	"_NET_CLIENT_LIST",
+	[WL_SURFACE_ID] = "WL_SURFACE_ID",
+	[WM_DELETE_WINDOW] = "WM_DELETE_WINDOW",
+	[WM_PROTOCOLS] = "WM_PROTOCOLS",
+	[WM_HINTS] = "WM_HINTS",
+	[WM_NORMAL_HINTS] = "WM_NORMAL_HINTS",
+	[WM_SIZE_HINTS] = "WM_SIZE_HINTS",
+	[WM_WINDOW_ROLE] = "WM_WINDOW_ROLE",
+	[MOTIF_WM_HINTS] = "_MOTIF_WM_HINTS",
+	[UTF8_STRING] = "UTF8_STRING",
+	[WM_S0] = "WM_S0",
+	[NET_SUPPORTED] = "_NET_SUPPORTED",
+	[NET_WM_CM_S0] = "_NET_WM_CM_S0",
+	[NET_WM_PID] = "_NET_WM_PID",
+	[NET_WM_NAME] = "_NET_WM_NAME",
+	[NET_WM_STATE] = "_NET_WM_STATE",
+	[NET_WM_WINDOW_TYPE] = "_NET_WM_WINDOW_TYPE",
+	[WM_TAKE_FOCUS] = "WM_TAKE_FOCUS",
+	[WINDOW] = "WINDOW",
+	[NET_ACTIVE_WINDOW] = "_NET_ACTIVE_WINDOW",
+	[NET_WM_MOVERESIZE] = "_NET_WM_MOVERESIZE",
+	[NET_SUPPORTING_WM_CHECK] = "_NET_SUPPORTING_WM_CHECK",
+	[NET_WM_STATE_MODAL] = "_NET_WM_STATE_MODAL",
+	[NET_WM_STATE_FULLSCREEN] = "_NET_WM_STATE_FULLSCREEN",
+	[NET_WM_STATE_MAXIMIZED_VERT] = "_NET_WM_STATE_MAXIMIZED_VERT",
+	[NET_WM_STATE_MAXIMIZED_HORZ] = "_NET_WM_STATE_MAXIMIZED_HORZ",
+	[NET_WM_PING] = "_NET_WM_PING",
+	[WM_STATE] = "WM_STATE",
+	[CLIPBOARD] = "CLIPBOARD",
+	[PRIMARY] = "PRIMARY",
+	[WL_SELECTION] = "_WL_SELECTION",
+	[TARGETS] = "TARGETS",
+	[CLIPBOARD_MANAGER] = "CLIPBOARD_MANAGER",
+	[INCR] = "INCR",
+	[TEXT] = "TEXT",
+	[TIMESTAMP] = "TIMESTAMP",
+	[DELETE] = "DELETE",
+	[NET_WM_WINDOW_TYPE_NORMAL] = "_NET_WM_WINDOW_TYPE_NORMAL",
+	[NET_WM_WINDOW_TYPE_UTILITY] = "_NET_WM_WINDOW_TYPE_UTILITY",
+	[NET_WM_WINDOW_TYPE_TOOLTIP] = "_NET_WM_WINDOW_TYPE_TOOLTIP",
+	[NET_WM_WINDOW_TYPE_DND] = "_NET_WM_WINDOW_TYPE_DND",
+	[NET_WM_WINDOW_TYPE_DROPDOWN_MENU] = "_NET_WM_WINDOW_TYPE_DROPDOWN_MENU",
+	[NET_WM_WINDOW_TYPE_POPUP_MENU] = "_NET_WM_WINDOW_TYPE_POPUP_MENU",
+	[NET_WM_WINDOW_TYPE_COMBO] = "_NET_WM_WINDOW_TYPE_COMBO",
+	[NET_WM_WINDOW_TYPE_MENU] = "_NET_WM_WINDOW_TYPE_MENU",
+	[NET_WM_WINDOW_TYPE_NOTIFICATION] = "_NET_WM_WINDOW_TYPE_NOTIFICATION",
+	[NET_WM_WINDOW_TYPE_SPLASH] = "_NET_WM_WINDOW_TYPE_SPLASH",
+	[DND_SELECTION] = "XdndSelection",
+	[DND_AWARE] = "XdndAware",
+	[DND_STATUS] = "XdndStatus",
+	[DND_POSITION] = "XdndPosition",
+	[DND_ENTER] = "XdndEnter",
+	[DND_LEAVE] = "XdndLeave",
+	[DND_DROP] = "XdndDrop",
+	[DND_FINISHED] = "XdndFinished",
+	[DND_PROXY] = "XdndProxy",
+	[DND_TYPE_LIST] = "XdndTypeList",
+	[DND_ACTION_MOVE] = "XdndActionMove",
+	[DND_ACTION_COPY] = "XdndActionCopy",
+	[DND_ACTION_ASK] = "XdndActionAsk",
+	[DND_ACTION_PRIVATE] = "XdndActionPrivate",
+	[NET_CLIENT_LIST] = "_NET_CLIENT_LIST",
 };
 
 static const struct wlr_surface_role xwayland_surface_role;
@@ -188,7 +187,7 @@ static struct wlr_xwayland_surface *xwayland_surface_create(
 static void xwm_set_net_active_window(struct wlr_xwm *xwm,
 		xcb_window_t window) {
 	xcb_change_property(xwm->xcb_conn, XCB_PROP_MODE_REPLACE,
-			xwm->screen->root, xwm->atoms[_NET_ACTIVE_WINDOW],
+			xwm->screen->root, xwm->atoms[NET_ACTIVE_WINDOW],
 			xwm->atoms[WINDOW], 32, 1, &window);
 }
 
@@ -231,7 +230,7 @@ static void xwm_set_net_client_list(struct wlr_xwm *xwm) {
 	}
 
 	xcb_change_property(xwm->xcb_conn, XCB_PROP_MODE_REPLACE,
-			xwm->screen->root, xwm->atoms[_NET_CLIENT_LIST],
+			xwm->screen->root, xwm->atoms[NET_CLIENT_LIST],
 			XCB_ATOM_WINDOW, 32, mapped_surfaces, windows);
 }
 
@@ -291,21 +290,21 @@ static void xwm_surface_activate(struct wlr_xwm *xwm,
 
 static void xsurface_set_net_wm_state(struct wlr_xwayland_surface *xsurface) {
 	struct wlr_xwm *xwm = xsurface->xwm;
-	uint32_t property[3];
+	uint32_t property[4];
 	int i;
 
 	i = 0;
 	if (xsurface->modal) {
-		property[i++] = xwm->atoms[_NET_WM_STATE_MODAL];
+		property[i++] = xwm->atoms[NET_WM_STATE_MODAL];
 	}
 	if (xsurface->fullscreen) {
-		property[i++] = xwm->atoms[_NET_WM_STATE_FULLSCREEN];
+		property[i++] = xwm->atoms[NET_WM_STATE_FULLSCREEN];
 	}
 	if (xsurface->maximized_vert) {
-		property[i++] = xwm->atoms[_NET_WM_STATE_MAXIMIZED_VERT];
+		property[i++] = xwm->atoms[NET_WM_STATE_MAXIMIZED_VERT];
 	}
 	if (xsurface->maximized_horz) {
-		property[i++] = xwm->atoms[_NET_WM_STATE_MAXIMIZED_HORZ];
+		property[i++] = xwm->atoms[NET_WM_STATE_MAXIMIZED_HORZ];
 	}
 
 	xcb_change_property(xwm->xcb_conn,
@@ -657,13 +656,13 @@ static void read_surface_net_wm_state(struct wlr_xwm *xwm,
 	xsurface->fullscreen = 0;
 	xcb_atom_t *atom = xcb_get_property_value(reply);
 	for (uint32_t i = 0; i < reply->value_len; i++) {
-		if (atom[i] == xwm->atoms[_NET_WM_STATE_MODAL]) {
+		if (atom[i] == xwm->atoms[NET_WM_STATE_MODAL]) {
 			xsurface->modal = true;
-		} else if (atom[i] == xwm->atoms[_NET_WM_STATE_FULLSCREEN]) {
+		} else if (atom[i] == xwm->atoms[NET_WM_STATE_FULLSCREEN]) {
 			xsurface->fullscreen = true;
-		} else if (atom[i] == xwm->atoms[_NET_WM_STATE_MAXIMIZED_VERT]) {
+		} else if (atom[i] == xwm->atoms[NET_WM_STATE_MAXIMIZED_VERT]) {
 			xsurface->maximized_vert = true;
-		} else if (atom[i] == xwm->atoms[_NET_WM_STATE_MAXIMIZED_HORZ]) {
+		} else if (atom[i] == xwm->atoms[NET_WM_STATE_MAXIMIZED_HORZ]) {
 			xsurface->maximized_horz = true;
 		}
 	}
@@ -871,6 +870,7 @@ static void xwm_handle_configure_request(struct wlr_xwm *xwm,
 		.y = mask & XCB_CONFIG_WINDOW_Y ? ev->y : surface->y,
 		.width = mask & XCB_CONFIG_WINDOW_WIDTH ? ev->width : surface->width,
 		.height = mask & XCB_CONFIG_WINDOW_HEIGHT ? ev->height : surface->height,
+		.mask = mask,
 	};
 	wlr_log(WLR_DEBUG, "XCB_CONFIGURE_REQUEST (%u) [%ux%u+%d,%d]", ev->window,
 		wlr_event.width, wlr_event.height, wlr_event.x, wlr_event.y);
@@ -985,7 +985,7 @@ static void xwm_handle_surface_id_message(struct wlr_xwm *xwm,
 	/* Check if we got notified after wayland surface create event */
 	uint32_t id = ev->data.data32[0];
 	struct wl_resource *resource =
-		wl_client_get_object(xwm->xwayland->client, id);
+		wl_client_get_object(xwm->xwayland->server->client, id);
 	if (resource) {
 		struct wlr_surface *surface = wlr_surface_from_resource(resource);
 		xsurface->surface_id = 0;
@@ -1130,16 +1130,16 @@ static void xwm_handle_net_wm_state_message(struct wlr_xwm *xwm,
 	for (size_t i = 0; i < 2; ++i) {
 		uint32_t property = client_message->data.data32[1 + i];
 
-		if (property == xwm->atoms[_NET_WM_STATE_MODAL] &&
+		if (property == xwm->atoms[NET_WM_STATE_MODAL] &&
 				update_state(action, &xsurface->modal)) {
 			xsurface_set_net_wm_state(xsurface);
-		} else if (property == xwm->atoms[_NET_WM_STATE_FULLSCREEN] &&
+		} else if (property == xwm->atoms[NET_WM_STATE_FULLSCREEN] &&
 				update_state(action, &xsurface->fullscreen)) {
 			xsurface_set_net_wm_state(xsurface);
-		} else if (property == xwm->atoms[_NET_WM_STATE_MAXIMIZED_VERT] &&
+		} else if (property == xwm->atoms[NET_WM_STATE_MAXIMIZED_VERT] &&
 				update_state(action, &xsurface->maximized_vert)) {
 			xsurface_set_net_wm_state(xsurface);
-		} else if (property == xwm->atoms[_NET_WM_STATE_MAXIMIZED_HORZ] &&
+		} else if (property == xwm->atoms[NET_WM_STATE_MAXIMIZED_HORZ] &&
 				update_state(action, &xsurface->maximized_horz)) {
 			xsurface_set_net_wm_state(xsurface);
 		}
@@ -1170,7 +1170,7 @@ static void xwm_handle_wm_protocols_message(struct wlr_xwm *xwm,
 		xcb_client_message_event_t *ev) {
 	xcb_atom_t type = ev->data.data32[0];
 
-	if (type == xwm->atoms[_NET_WM_PING]) {
+	if (type == xwm->atoms[NET_WM_PING]) {
 		xcb_window_t window_id = ev->data.data32[2];
 
 		struct wlr_xwayland_surface *surface = lookup_surface(xwm, window_id);
@@ -1209,11 +1209,11 @@ static void xwm_handle_client_message(struct wlr_xwm *xwm,
 		xwm_handle_surface_id_message(xwm, ev);
 	} else if (ev->type == xwm->atoms[NET_WM_STATE]) {
 		xwm_handle_net_wm_state_message(xwm, ev);
-	} else if (ev->type == xwm->atoms[_NET_WM_MOVERESIZE]) {
+	} else if (ev->type == xwm->atoms[NET_WM_MOVERESIZE]) {
 		xwm_handle_net_wm_moveresize_message(xwm, ev);
 	} else if (ev->type == xwm->atoms[WM_PROTOCOLS]) {
 		xwm_handle_wm_protocols_message(xwm, ev);
-	} else if (ev->type == xwm->atoms[_NET_ACTIVE_WINDOW]) {
+	} else if (ev->type == xwm->atoms[NET_ACTIVE_WINDOW]) {
 		xwm_handle_net_active_window_message(xwm, ev);
 	} else if (!xwm_handle_selection_client_message(xwm, ev)) {
 		char *type_name = xwm_get_atom_name(xwm, ev->type);
@@ -1230,12 +1230,25 @@ static void xwm_handle_focus_in(struct wlr_xwm *xwm,
 			ev->mode == XCB_NOTIFY_MODE_UNGRAB) {
 		return;
 	}
+	// Ignore pointer focus change events
+	if (ev->detail == XCB_NOTIFY_DETAIL_POINTER) {
+		return;
+	}
 
 	// Do not let X clients change the focus behind the compositor's
 	// back. Reset the focus to the old one if it changed.
-	if (!xwm->focus_surface || ev->event != xwm->focus_surface->window_id) {
-		xwm_send_focus_window(xwm, xwm->focus_surface);
+	//
+	// Note: Some applications rely on being able to change focus, for ex. Steam:
+	// https://github.com/swaywm/sway/issues/1865
+	// Because of that, we allow changing focus between surfaces belonging to the
+	// same application.
+	struct wlr_xwayland_surface *requested_focus = lookup_surface(xwm, ev->event);
+	if (xwm->focus_surface && requested_focus &&
+			requested_focus->pid == xwm->focus_surface->pid) {
+		xwm->focus_surface = requested_focus;
 	}
+
+	xwm_send_focus_window(xwm, xwm->focus_surface);
 }
 
 static void xwm_handle_xcb_error(struct wlr_xwm *xwm, xcb_value_error_t *ev) {
@@ -1368,7 +1381,9 @@ static void handle_compositor_new_surface(struct wl_listener *listener,
 	struct wlr_xwm *xwm =
 		wl_container_of(listener, xwm, compositor_new_surface);
 	struct wlr_surface *surface = data;
-	if (wl_resource_get_client(surface->resource) != xwm->xwayland->client) {
+
+	struct wl_client *client = wl_resource_get_client(surface->resource);
+	if (client != xwm->xwayland->server->client) {
 		return;
 	}
 
@@ -1548,7 +1563,7 @@ static void xwm_create_wm_window(struct wlr_xwm *xwm) {
 	xcb_change_property(xwm->xcb_conn,
 		XCB_PROP_MODE_REPLACE,
 		xwm->window,
-		xwm->atoms[_NET_WM_NAME],
+		xwm->atoms[NET_WM_NAME],
 		xwm->atoms[UTF8_STRING],
 		8, // format
 		strlen(name), name);
@@ -1556,7 +1571,7 @@ static void xwm_create_wm_window(struct wlr_xwm *xwm) {
 	xcb_change_property(xwm->xcb_conn,
 		XCB_PROP_MODE_REPLACE,
 		xwm->screen->root,
-		xwm->atoms[_NET_SUPPORTING_WM_CHECK],
+		xwm->atoms[NET_SUPPORTING_WM_CHECK],
 		XCB_ATOM_WINDOW,
 		32, // format
 		1, &xwm->window);
@@ -1564,7 +1579,7 @@ static void xwm_create_wm_window(struct wlr_xwm *xwm) {
 	xcb_change_property(xwm->xcb_conn,
 		XCB_PROP_MODE_REPLACE,
 		xwm->window,
-		xwm->atoms[_NET_SUPPORTING_WM_CHECK],
+		xwm->atoms[NET_SUPPORTING_WM_CHECK],
 		XCB_ATOM_WINDOW,
 		32, // format
 		1, &xwm->window);
@@ -1682,23 +1697,22 @@ void xwm_set_cursor(struct wlr_xwm *xwm, const uint8_t *pixels, uint32_t stride,
 	xcb_flush(xwm->xcb_conn);
 }
 
-struct wlr_xwm *xwm_create(struct wlr_xwayland *wlr_xwayland) {
+struct wlr_xwm *xwm_create(struct wlr_xwayland *xwayland, int wm_fd) {
 	struct wlr_xwm *xwm = calloc(1, sizeof(struct wlr_xwm));
 	if (xwm == NULL) {
 		return NULL;
 	}
 
-	xwm->xwayland = wlr_xwayland;
+	xwm->xwayland = xwayland;
 	wl_list_init(&xwm->surfaces);
 	wl_list_init(&xwm->unpaired_surfaces);
 	xwm->ping_timeout = 10000;
 
-	xwm->xcb_conn = xcb_connect_to_fd(wlr_xwayland->wm_fd[0], NULL);
+	xwm->xcb_conn = xcb_connect_to_fd(wm_fd, NULL);
 
 	int rc = xcb_connection_has_error(xwm->xcb_conn);
 	if (rc) {
 		wlr_log(WLR_ERROR, "xcb connect failed: %d", rc);
-		close(wlr_xwayland->wm_fd[0]);
 		free(xwm);
 		return NULL;
 	}
@@ -1710,18 +1724,15 @@ struct wlr_xwm *xwm_create(struct wlr_xwayland *wlr_xwayland) {
 		return NULL;
 	}
 #endif
+
 	xcb_screen_iterator_t screen_iterator =
 		xcb_setup_roots_iterator(xcb_get_setup(xwm->xcb_conn));
 	xwm->screen = screen_iterator.data;
 
-	struct wl_event_loop *event_loop = wl_display_get_event_loop(
-		wlr_xwayland->wl_display);
-	xwm->event_source =
-		wl_event_loop_add_fd(event_loop,
-			wlr_xwayland->wm_fd[0],
-			WL_EVENT_READABLE,
-			x11_event_handler,
-			xwm);
+	struct wl_event_loop *event_loop =
+		wl_display_get_event_loop(xwayland->wl_display);
+	xwm->event_source = wl_event_loop_add_fd(event_loop, wm_fd,
+		WL_EVENT_READABLE, x11_event_handler, xwm);
 	wl_event_source_check(xwm->event_source);
 
 	xwm_get_resources(xwm);
@@ -1744,13 +1755,13 @@ struct wlr_xwm *xwm_create(struct wlr_xwayland *wlr_xwayland) {
 
 	xcb_atom_t supported[] = {
 		xwm->atoms[NET_WM_STATE],
-		xwm->atoms[_NET_ACTIVE_WINDOW],
-		xwm->atoms[_NET_WM_MOVERESIZE],
-		xwm->atoms[_NET_WM_STATE_MODAL],
-		xwm->atoms[_NET_WM_STATE_FULLSCREEN],
-		xwm->atoms[_NET_WM_STATE_MAXIMIZED_VERT],
-		xwm->atoms[_NET_WM_STATE_MAXIMIZED_HORZ],
-		xwm->atoms[_NET_CLIENT_LIST],
+		xwm->atoms[NET_ACTIVE_WINDOW],
+		xwm->atoms[NET_WM_MOVERESIZE],
+		xwm->atoms[NET_WM_STATE_MODAL],
+		xwm->atoms[NET_WM_STATE_FULLSCREEN],
+		xwm->atoms[NET_WM_STATE_MAXIMIZED_VERT],
+		xwm->atoms[NET_WM_STATE_MAXIMIZED_HORZ],
+		xwm->atoms[NET_CLIENT_LIST],
 	};
 	xcb_change_property(xwm->xcb_conn,
 		XCB_PROP_MODE_REPLACE,
@@ -1768,10 +1779,10 @@ struct wlr_xwm *xwm_create(struct wlr_xwayland *wlr_xwayland) {
 	xwm_selection_init(xwm);
 
 	xwm->compositor_new_surface.notify = handle_compositor_new_surface;
-	wl_signal_add(&wlr_xwayland->compositor->events.new_surface,
+	wl_signal_add(&xwayland->compositor->events.new_surface,
 		&xwm->compositor_new_surface);
 	xwm->compositor_destroy.notify = handle_compositor_destroy;
-	wl_signal_add(&wlr_xwayland->compositor->events.destroy,
+	wl_signal_add(&xwayland->compositor->events.destroy,
 		&xwm->compositor_destroy);
 
 	xwm_create_wm_window(xwm);
@@ -1811,7 +1822,7 @@ bool xwm_atoms_contains(struct wlr_xwm *xwm, xcb_atom_t *atoms,
 
 void wlr_xwayland_surface_ping(struct wlr_xwayland_surface *surface) {
 	xcb_client_message_data_t data = { 0 };
-	data.data32[0] = surface->xwm->atoms[_NET_WM_PING];
+	data.data32[0] = surface->xwm->atoms[NET_WM_PING];
 	data.data32[1] = XCB_CURRENT_TIME;
 	data.data32[2] = surface->window_id;
 

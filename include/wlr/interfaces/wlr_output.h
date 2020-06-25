@@ -15,24 +15,18 @@
 #include <wlr/types/wlr_output.h>
 
 struct wlr_output_impl {
-	bool (*enable)(struct wlr_output *output, bool enable);
-	bool (*set_mode)(struct wlr_output *output, struct wlr_output_mode *mode);
-	bool (*set_custom_mode)(struct wlr_output *output, int32_t width,
-		int32_t height, int32_t refresh);
 	bool (*set_cursor)(struct wlr_output *output, struct wlr_texture *texture,
-		int32_t scale, enum wl_output_transform transform,
+		float scale, enum wl_output_transform transform,
 		int32_t hotspot_x, int32_t hotspot_y, bool update_texture);
 	bool (*move_cursor)(struct wlr_output *output, int x, int y);
 	void (*destroy)(struct wlr_output *output);
 	bool (*attach_render)(struct wlr_output *output, int *buffer_age);
+	bool (*test)(struct wlr_output *output);
 	bool (*commit)(struct wlr_output *output);
-	bool (*set_gamma)(struct wlr_output *output, size_t size,
-		const uint16_t *r, const uint16_t *g, const uint16_t *b);
+	void (*rollback_render)(struct wlr_output *output);
 	size_t (*get_gamma_size)(struct wlr_output *output);
 	bool (*export_dmabuf)(struct wlr_output *output,
 		struct wlr_dmabuf_attributes *attribs);
-	bool (*schedule_frame)(struct wlr_output *output);
-	bool (*attach_buffer)(struct wlr_output *output, struct wlr_buffer *buffer);
 };
 
 void wlr_output_init(struct wlr_output *output, struct wlr_backend *backend,

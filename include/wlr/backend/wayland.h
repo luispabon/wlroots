@@ -2,7 +2,7 @@
 #define WLR_BACKEND_WAYLAND_H
 #include <stdbool.h>
 #include <wayland-client.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/backend.h>
 #include <wlr/types/wlr_input_device.h>
 #include <wlr/types/wlr_output.h>
@@ -17,6 +17,11 @@
  */
 struct wlr_backend *wlr_wl_backend_create(struct wl_display *display,
 		const char *remote, wlr_renderer_create_func_t create_renderer_func);
+
+/**
+ * Returns the remote wl_display used by the Wayland backend.
+ */
+struct wl_display *wlr_wl_backend_get_remote_display(struct wlr_backend *backend);
 
 /**
  * Adds a new output to this backend. You may remove outputs by destroying them.
@@ -45,5 +50,15 @@ bool wlr_output_is_wl(struct wlr_output *output);
  * Sets the title of a wlr_output which is a Wayland window.
  */
 void wlr_wl_output_set_title(struct wlr_output *output, const char *title);
+
+/**
+ * Returns the remote wl_surface used by the Wayland output.
+ */
+struct wl_surface *wlr_wl_output_get_surface(struct wlr_output *output);
+
+/**
+ * Returns the remote wl_seat for a Wayland input device.
+ */
+struct wl_seat *wlr_wl_input_device_get_seat(struct wlr_input_device *dev);
 
 #endif

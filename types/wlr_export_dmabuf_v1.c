@@ -34,9 +34,11 @@ static void frame_destroy(struct wlr_export_dmabuf_frame_v1 *frame) {
 	if (frame == NULL) {
 		return;
 	}
-	wlr_output_lock_attach_render(frame->output, false);
-	if (frame->cursor_locked) {
-		wlr_output_lock_software_cursors(frame->output, false);
+	if (frame->output != NULL) {
+		wlr_output_lock_attach_render(frame->output, false);
+		if (frame->cursor_locked) {
+			wlr_output_lock_software_cursors(frame->output, false);
+		}
 	}
 	wl_list_remove(&frame->link);
 	wl_list_remove(&frame->output_precommit.link);
@@ -96,7 +98,6 @@ static void manager_handle_capture_output(struct wl_client *client,
 		return;
 	}
 	frame->manager = manager;
-	frame->output = output;
 	wl_list_init(&frame->output_precommit.link);
 
 	uint32_t version = wl_resource_get_version(manager_resource);
@@ -112,7 +113,7 @@ static void manager_handle_capture_output(struct wl_client *client,
 
 	wl_list_insert(&manager->frames, &frame->link);
 
-	if (!output->impl->export_dmabuf) {
+	if (output == NULL || !output->enabled || !output->impl->export_dmabuf) {
 		zwlr_export_dmabuf_frame_v1_send_cancel(frame->resource,
 			ZWLR_EXPORT_DMABUF_FRAME_V1_CANCEL_REASON_PERMANENT);
 		frame_destroy(frame);
@@ -126,6 +127,8 @@ static void manager_handle_capture_output(struct wl_client *client,
 		frame_destroy(frame);
 		return;
 	}
+
+	frame->output = output;
 
 	wlr_output_lock_attach_render(frame->output, true);
 	if (overlay_cursor) {
@@ -148,6 +151,8 @@ static void manager_handle_capture_output(struct wl_client *client,
 			attribs->fd[i], size, attribs->offset[i], attribs->stride[i], i);
 	}
 
+	wlr_output_schedule_frame(output);
+
 	wl_list_remove(&frame->output_precommit.link);
 	wl_signal_add(&output->events.precommit, &frame->output_precommit);
 	frame->output_precommit.notify = frame_output_handle_precommit;
@@ -163,10 +168,6 @@ static const struct zwlr_export_dmabuf_manager_v1_interface manager_impl = {
 	.destroy = manager_handle_destroy,
 };
 
-static void manager_handle_resource_destroy(struct wl_resource *resource) {
-	wl_list_remove(wl_resource_get_link(resource));
-}
-
 static void manager_bind(struct wl_client *client, void *data, uint32_t version,
 		uint32_t id) {
 	struct wlr_export_dmabuf_manager_v1 *manager = data;
@@ -178,15 +179,16 @@ static void manager_bind(struct wl_client *client, void *data, uint32_t version,
 		return;
 	}
 	wl_resource_set_implementation(resource, &manager_impl, manager,
-		manager_handle_resource_destroy);
-
-	wl_list_insert(&manager->resources, wl_resource_get_link(resource));
+		NULL);
 }
 
 static void handle_display_destroy(struct wl_listener *listener, void *data) {
 	struct wlr_export_dmabuf_manager_v1 *manager =
 		wl_container_of(listener, manager, display_destroy);
-	wlr_export_dmabuf_manager_v1_destroy(manager);
+	wlr_signal_emit_safe(&manager->events.destroy, manager);
+	wl_list_remove(&manager->display_destroy.link);
+	wl_global_destroy(manager->global);
+	free(manager);
 }
 
 struct wlr_export_dmabuf_manager_v1 *wlr_export_dmabuf_manager_v1_create(
@@ -196,7 +198,6 @@ struct wlr_export_dmabuf_manager_v1 *wlr_export_dmabuf_manager_v1_create(
 	if (manager == NULL) {
 		return NULL;
 	}
-	wl_list_init(&manager->resources);
 	wl_list_init(&manager->frames);
 	wl_signal_init(&manager->events.destroy);
 
@@ -212,23 +213,4 @@ struct wlr_export_dmabuf_manager_v1 *wlr_export_dmabuf_manager_v1_create(
 	wl_display_add_destroy_listener(display, &manager->display_destroy);
 
 	return manager;
-}
-
-void wlr_export_dmabuf_manager_v1_destroy(
-		struct wlr_export_dmabuf_manager_v1 *manager) {
-	if (manager == NULL) {
-		return;
-	}
-	wlr_signal_emit_safe(&manager->events.destroy, manager);
-	wl_list_remove(&manager->display_destroy.link);
-	wl_global_destroy(manager->global);
-	struct wl_resource *resource, *resource_tmp;
-	wl_resource_for_each_safe(resource, resource_tmp, &manager->resources) {
-		wl_resource_destroy(resource);
-	}
-	struct wlr_export_dmabuf_frame_v1 *frame, *frame_tmp;
-	wl_list_for_each_safe(frame, frame_tmp, &manager->frames, link) {
-		wl_resource_destroy(frame->resource);
-	}
-	free(manager);
 }

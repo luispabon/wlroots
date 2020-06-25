@@ -10,7 +10,7 @@
 #include <wlr/config.h>
 
 #include <X11/Xlib-xcb.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <xcb/xcb.h>
 #include <xcb/xfixes.h>
 #include <xcb/xinput.h>
@@ -203,6 +203,7 @@ struct wlr_backend *wlr_x11_backend_create(struct wl_display *display,
 		{ .name = "WM_DELETE_WINDOW", .atom = &x11->atoms.wm_delete_window },
 		{ .name = "_NET_WM_NAME", .atom = &x11->atoms.net_wm_name },
 		{ .name = "UTF8_STRING", .atom = &x11->atoms.utf8_string },
+		{ .name = "_VARIABLE_REFRESH", .atom = &x11->atoms.variable_refresh },
 	};
 
 	for (size_t i = 0; i < sizeof(atom) / sizeof(atom[0]); ++i) {
@@ -279,6 +280,7 @@ struct wlr_backend *wlr_x11_backend_create(struct wl_display *display,
 
 	static EGLint config_attribs[] = {
 		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
 		EGL_RED_SIZE, 1,
 		EGL_GREEN_SIZE, 1,
 		EGL_BLUE_SIZE, 1,

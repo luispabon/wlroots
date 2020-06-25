@@ -9,7 +9,7 @@
 #ifndef WLR_TYPES_WLR_XCURSOR_MANAGER_H
 #define WLR_TYPES_WLR_XCURSOR_MANAGER_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_cursor.h>
 #include <wlr/xcursor.h>
 
@@ -46,7 +46,7 @@ void wlr_xcursor_manager_destroy(struct wlr_xcursor_manager *manager);
 /**
  * Ensures an xcursor theme at the given scale factor is loaded in the manager.
  */
-int wlr_xcursor_manager_load(struct wlr_xcursor_manager *manager,
+bool wlr_xcursor_manager_load(struct wlr_xcursor_manager *manager,
 	float scale);
 
 /**

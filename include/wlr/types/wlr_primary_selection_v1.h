@@ -9,12 +9,11 @@
 #ifndef WLR_TYPES_WLR_PRIMARY_SELECTION_V1_H
 #define WLR_TYPES_WLR_PRIMARY_SELECTION_V1_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_seat.h>
 
 struct wlr_primary_selection_v1_device_manager {
 	struct wl_global *global;
-	struct wl_list resources; // wl_resource_get_link
 	struct wl_list devices; // wlr_primary_selection_v1_device::link
 
 	struct wl_listener display_destroy;
@@ -46,7 +45,5 @@ struct wlr_primary_selection_v1_device {
 
 struct wlr_primary_selection_v1_device_manager *
 	wlr_primary_selection_v1_device_manager_create(struct wl_display *display);
-void wlr_primary_selection_v1_device_manager_destroy(
-	struct wlr_primary_selection_v1_device_manager *manager);
 
 #endif

@@ -5,7 +5,8 @@
 
 #include <wlr/config.h>
 
-#include <wayland-server.h>
+#include <drm_fourcc.h>
+#include <wayland-server-core.h>
 
 #include <wlr/backend/interface.h>
 #include <wlr/interfaces/wlr_input_device.h>
@@ -16,9 +17,13 @@
 
 #include "backend/wayland.h"
 #include "util/signal.h"
-#include "xdg-decoration-unstable-v1-client-protocol.h"
+#include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
+#include "presentation-time-client-protocol.h"
+#include "xdg-decoration-unstable-v1-client-protocol.h"
 #include "xdg-shell-client-protocol.h"
+#include "tablet-unstable-v2-client-protocol.h"
+#include "relative-pointer-unstable-v1-client-protocol.h"
 
 struct wlr_wl_backend *get_wl_backend_from_backend(struct wlr_backend *backend) {
 	assert(wlr_backend_is_wl(backend));
@@ -29,24 +34,31 @@ static int dispatch_events(int fd, uint32_t mask, void *data) {
 	struct wlr_wl_backend *wl = data;
 
 	if ((mask & WL_EVENT_HANGUP) || (mask & WL_EVENT_ERROR)) {
+		if (mask & WL_EVENT_ERROR) {
+			wlr_log(WLR_ERROR, "Failed to read from remote Wayland display");
+		}
 		wl_display_terminate(wl->local_display);
 		return 0;
 	}
 
+	int count = 0;
 	if (mask & WL_EVENT_READABLE) {
-		return wl_display_dispatch(wl->remote_display);
+		count = wl_display_dispatch(wl->remote_display);
 	}
 	if (mask & WL_EVENT_WRITABLE) {
 		wl_display_flush(wl->remote_display);
-		return 0;
 	}
 	if (mask == 0) {
-		int count = wl_display_dispatch_pending(wl->remote_display);
+		count = wl_display_dispatch_pending(wl->remote_display);
 		wl_display_flush(wl->remote_display);
-		return count;
 	}
 
-	return 0;
+	if (count < 0) {
+		wlr_log(WLR_ERROR, "Failed to dispatch remote Wayland display");
+		wl_display_terminate(wl->local_display);
+		return 0;
+	}
+	return count;
 }
 
 static void xdg_wm_base_handle_ping(void *data,
@@ -56,6 +68,29 @@ static void xdg_wm_base_handle_ping(void *data,
 
 static const struct xdg_wm_base_listener xdg_wm_base_listener = {
 	xdg_wm_base_handle_ping,
+};
+
+static void linux_dmabuf_v1_handle_format(void *data,
+		struct zwp_linux_dmabuf_v1 *linux_dmabuf_v1, uint32_t format) {
+	// Note, this event is deprecated
+	struct wlr_wl_backend *wl = data;
+
+	wlr_drm_format_set_add(&wl->linux_dmabuf_v1_formats, format,
+		DRM_FORMAT_MOD_INVALID);
+}
+
+static void linux_dmabuf_v1_handle_modifier(void *data,
+		struct zwp_linux_dmabuf_v1 *linux_dmabuf_v1, uint32_t format,
+		uint32_t modifier_hi, uint32_t modifier_lo) {
+	struct wlr_wl_backend *wl = data;
+
+	uint64_t modifier = ((uint64_t)modifier_hi << 32) | modifier_lo;
+	wlr_drm_format_set_add(&wl->linux_dmabuf_v1_formats, format, modifier);
+}
+
+static const struct zwp_linux_dmabuf_v1_listener linux_dmabuf_v1_listener = {
+	.format = linux_dmabuf_v1_handle_format,
+	.modifier = linux_dmabuf_v1_handle_modifier,
 };
 
 static void registry_global(void *data, struct wl_registry *registry,
@@ -81,6 +116,21 @@ static void registry_global(void *data, struct wl_registry *registry,
 	} else if (strcmp(iface, zwp_pointer_gestures_v1_interface.name) == 0) {
 		wl->zwp_pointer_gestures_v1 = wl_registry_bind(registry, name,
 			&zwp_pointer_gestures_v1_interface, 1);
+	} else if (strcmp(iface, wp_presentation_interface.name) == 0) {
+		wl->presentation = wl_registry_bind(registry, name,
+			&wp_presentation_interface, 1);
+	} else if (strcmp(iface, zwp_tablet_manager_v2_interface.name) == 0) {
+		wl->tablet_manager = wl_registry_bind(registry, name,
+			&zwp_tablet_manager_v2_interface, 1);
+	} else if (strcmp(iface, zwp_linux_dmabuf_v1_interface.name) == 0 &&
+			version >= 3) {
+		wl->zwp_linux_dmabuf_v1 = wl_registry_bind(registry, name,
+			&zwp_linux_dmabuf_v1_interface, 3);
+		zwp_linux_dmabuf_v1_add_listener(wl->zwp_linux_dmabuf_v1,
+			&linux_dmabuf_v1_listener, wl);
+	} else if (strcmp(iface, zwp_relative_pointer_manager_v1_interface.name) == 0) {
+		wl->zwp_relative_pointer_manager_v1 = wl_registry_bind(registry, name,
+			&zwp_relative_pointer_manager_v1_interface, 1);
 	}
 }
 
@@ -107,6 +157,11 @@ static bool backend_start(struct wlr_backend *backend) {
 
 	if (wl->keyboard) {
 		create_wl_keyboard(wl->keyboard, wl);
+	}
+
+	if (wl->tablet_manager && wl->seat) {
+		wl_add_tablet_seat(wl->tablet_manager,
+			wl->seat, wl);
 	}
 
 	for (size_t i = 0; i < wl->requested_outputs; ++i) {
@@ -144,6 +199,8 @@ static void backend_destroy(struct wlr_backend *backend) {
 	wlr_renderer_destroy(wl->renderer);
 	wlr_egl_finish(&wl->egl);
 
+	wlr_drm_format_set_finish(&wl->linux_dmabuf_v1_formats);
+
 	if (wl->pointer) {
 		wl_pointer_destroy(wl->pointer);
 	}
@@ -155,6 +212,15 @@ static void backend_destroy(struct wlr_backend *backend) {
 	}
 	if (wl->zwp_pointer_gestures_v1) {
 		zwp_pointer_gestures_v1_destroy(wl->zwp_pointer_gestures_v1);
+	}
+	if (wl->presentation) {
+		wp_presentation_destroy(wl->presentation);
+	}
+	if (wl->zwp_linux_dmabuf_v1) {
+		zwp_linux_dmabuf_v1_destroy(wl->zwp_linux_dmabuf_v1);
+	}
+	if (wl->zwp_relative_pointer_manager_v1) {
+		zwp_relative_pointer_manager_v1_destroy(wl->zwp_relative_pointer_manager_v1);
 	}
 	xdg_wm_base_destroy(wl->xdg_wm_base);
 	wl_compositor_destroy(wl->compositor);
@@ -240,6 +306,7 @@ struct wlr_backend *wlr_wl_backend_create(struct wl_display *display,
 
 	static EGLint config_attribs[] = {
 		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
 		EGL_RED_SIZE, 1,
 		EGL_GREEN_SIZE, 1,
 		EGL_BLUE_SIZE, 1,
@@ -279,4 +346,9 @@ error_display:
 error_wl:
 	free(wl);
 	return NULL;
+}
+
+struct wl_display *wlr_wl_backend_get_remote_display(struct wlr_backend *backend) {
+	struct wlr_wl_backend *wl = get_wl_backend_from_backend(backend);
+	return wl->remote_display;
 }

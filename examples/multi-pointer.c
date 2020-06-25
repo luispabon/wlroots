@@ -7,8 +7,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <wayland-server-protocol.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/backend.h>
 #include <wlr/backend/session.h>
 #include <wlr/render/gles2.h>
@@ -69,7 +68,7 @@ struct sample_keyboard {
 	struct wl_listener destroy;
 };
 
-void configure_cursor(struct wlr_cursor *cursor, struct wlr_input_device *device,
+static void configure_cursor(struct wlr_cursor *cursor, struct wlr_input_device *device,
 		 struct sample_state *sample) {
 	struct sample_output *output;
 	wlr_log(WLR_ERROR, "Configuring cursor %p for device %p", cursor, device);
@@ -89,7 +88,7 @@ void configure_cursor(struct wlr_cursor *cursor, struct wlr_input_device *device
 	}
 }
 
-void output_frame_notify(struct wl_listener *listener, void *data) {
+static void output_frame_notify(struct wl_listener *listener, void *data) {
 	struct sample_output *output = wl_container_of(listener, output, frame);
 	struct sample_state *sample = output->sample;
 	struct wlr_output *wlr_output = output->output;
@@ -128,27 +127,7 @@ static void cursor_destroy(struct sample_cursor *cursor) {
 	free(cursor);
 }
 
-void input_remove_notify(struct wl_listener *listener, void *data) {
-	struct wlr_input_device *device = data;
-	struct sample_cursor *sample_cursor = wl_container_of(listener, sample_cursor, destroy);
-	struct sample_state *sample = sample_cursor->sample;
-	struct sample_cursor *cursor;
-	wl_list_for_each(cursor, &sample->cursors, link) {
-		if (cursor->device == device) {
-			cursor_destroy(cursor);
-			break;
-		}
-	}
-	struct sample_pointer *pointer;
-	wl_list_for_each(pointer, &sample->pointers, link) {
-		if (pointer->device == device) {
-			free(pointer);
-			break;
-		}
-	}
-}
-
-void output_remove_notify(struct wl_listener *listener, void *data) {
+static void output_remove_notify(struct wl_listener *listener, void *data) {
 	struct sample_output *sample_output = wl_container_of(listener, sample_output, destroy);
 	struct sample_state *sample = sample_output->sample;
 	wl_list_remove(&sample_output->frame.link);
@@ -162,7 +141,7 @@ void output_remove_notify(struct wl_listener *listener, void *data) {
 	}
 }
 
-void new_output_notify(struct wl_listener *listener, void *data) {
+static void new_output_notify(struct wl_listener *listener, void *data) {
 	struct wlr_output *output = data;
 	struct sample_state *sample = wl_container_of(listener, sample, new_output);
 	struct sample_output *sample_output = calloc(1, sizeof(struct sample_output));
@@ -192,9 +171,11 @@ void new_output_notify(struct wl_listener *listener, void *data) {
 			cursor->cursor->y);
 	}
 	wl_list_insert(&sample->outputs, &sample_output->link);
+
+	wlr_output_commit(output);
 }
 
-void keyboard_key_notify(struct wl_listener *listener, void *data) {
+static void keyboard_key_notify(struct wl_listener *listener, void *data) {
 	struct sample_keyboard *keyboard = wl_container_of(listener, keyboard, key);
 	struct sample_state *sample = keyboard->sample;
 	struct wlr_event_keyboard_key *event = data;
@@ -210,14 +191,14 @@ void keyboard_key_notify(struct wl_listener *listener, void *data) {
 	}
 }
 
-void keyboard_destroy_notify(struct wl_listener *listener, void *data) {
+static void keyboard_destroy_notify(struct wl_listener *listener, void *data) {
 	struct sample_keyboard *keyboard = wl_container_of(listener, keyboard, destroy);
 	wl_list_remove(&keyboard->destroy.link);
 	wl_list_remove(&keyboard->key.link);
 	free(keyboard);
 }
 
-void new_input_notify(struct wl_listener *listener, void *data) {
+static void new_input_notify(struct wl_listener *listener, void *data) {
 	struct wlr_input_device *device = data;
 	struct sample_state *sample = wl_container_of(listener, sample, new_input);
 	switch (device->type) {

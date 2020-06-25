@@ -9,7 +9,7 @@
 #ifndef WLR_TYPES_WLR_IDLE_INHIBIT_V1_H
 #define WLR_TYPES_WLR_IDLE_INHIBIT_V1_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 
 /* This interface permits clients to inhibit the idle behavior such as
  * screenblanking, locking, and screensaving.
@@ -24,7 +24,6 @@
  */
 
 struct wlr_idle_inhibit_manager_v1 {
-	struct wl_list resources; // wl_resource_get_link
 	struct wl_list inhibitors; // wlr_idle_inhibit_inhibitor_v1::link
 	struct wl_global *global;
 
@@ -53,6 +52,5 @@ struct wlr_idle_inhibitor_v1 {
 };
 
 struct wlr_idle_inhibit_manager_v1 *wlr_idle_inhibit_v1_create(struct wl_display *display);
-void wlr_idle_inhibit_v1_destroy(struct wlr_idle_inhibit_manager_v1 *idle_inhibit);
 
 #endif

@@ -9,7 +9,7 @@
 #ifndef WLR_TYPES_WLR_IDLE_H
 #define WLR_TYPES_WLR_IDLE_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_seat.h>
 
 /**
@@ -59,8 +59,6 @@ struct wlr_idle_timeout {
 };
 
 struct wlr_idle *wlr_idle_create(struct wl_display *display);
-
-void wlr_idle_destroy(struct wlr_idle *idle);
 
 /**
  * Send notification to restart all timers for the given seat. Called by

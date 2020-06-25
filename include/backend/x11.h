@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #include <X11/Xlib-xcb.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <xcb/xcb.h>
 
 #include <wlr/backend/x11.h>
@@ -72,6 +72,7 @@ struct wlr_x11_backend {
 		xcb_atom_t wm_delete_window;
 		xcb_atom_t net_wm_name;
 		xcb_atom_t utf8_string;
+		xcb_atom_t variable_refresh;
 	} atoms;
 
 	// The time we last received an event

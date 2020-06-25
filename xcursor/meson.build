@@ -1,9 +1,11 @@
-lib_wlr_xcursor = static_library(
-	'wlr_xcursor',
-	files(
-		'wlr_xcursor.c',
-		'xcursor.c',
-	),
-	include_directories: wlr_inc,
-	dependencies: [egl] # header required via include/wlr/render.h
+icondir = get_option('icon_directory')
+if icondir == ''
+	icondir = join_paths(get_option('prefix'), get_option('datadir'), 'icons')
+endif
+
+add_project_arguments('-DICONDIR="@0@"'.format(icondir), language : 'c')
+
+wlr_files += files(
+	'wlr_xcursor.c',
+	'xcursor.c',
 )

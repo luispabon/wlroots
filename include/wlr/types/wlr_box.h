@@ -11,11 +11,16 @@
 
 #include <pixman.h>
 #include <stdbool.h>
-#include <wayland-server.h>
+#include <wayland-server-protocol.h>
 
 struct wlr_box {
 	int x, y;
 	int width, height;
+};
+
+struct wlr_fbox {
+	double x, y;
+	double width, height;
 };
 
 void wlr_box_closest_point(const struct wlr_box *box, double x, double y,

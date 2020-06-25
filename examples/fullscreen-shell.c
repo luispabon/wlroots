@@ -5,12 +5,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/backend.h>
 #include <wlr/render/wlr_renderer.h>
 #include <wlr/types/wlr_compositor.h>
 #include <wlr/types/wlr_fullscreen_shell_v1.h>
-#include <wlr/types/wlr_linux_dmabuf_v1.h>
 #include <wlr/types/wlr_matrix.h>
 #include <wlr/types/wlr_output_layout.h>
 #include <wlr/types/wlr_output.h>
@@ -163,6 +162,8 @@ static void server_handle_new_output(struct wl_listener *listener, void *data) {
 
 	wlr_output_layout_add_auto(server->output_layout, wlr_output);
 	wlr_output_create_global(wlr_output);
+
+	wlr_output_commit(wlr_output);
 }
 
 static void server_handle_present_surface(struct wl_listener *listener,
@@ -207,7 +208,6 @@ int main(int argc, char *argv[]) {
 	wlr_renderer_init_wl_display(server.renderer, server.wl_display);
 
 	wlr_compositor_create(server.wl_display, server.renderer);
-	wlr_linux_dmabuf_v1_create(server.wl_display, server.renderer);
 
 	server.output_layout = wlr_output_layout_create();
 

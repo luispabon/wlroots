@@ -9,23 +9,18 @@
 #ifndef WLR_TYPES_WLR_COMPOSITOR_H
 #define WLR_TYPES_WLR_COMPOSITOR_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/render/wlr_renderer.h>
 
 struct wlr_surface;
 
 struct wlr_subcompositor {
 	struct wl_global *global;
-	struct wl_list resources;
-	struct wl_list subsurface_resources;
 };
 
 struct wlr_compositor {
 	struct wl_global *global;
-	struct wl_list resources;
 	struct wlr_renderer *renderer;
-	struct wl_list surface_resources;
-	struct wl_list region_resources;
 
 	struct wlr_subcompositor subcompositor;
 
@@ -37,7 +32,6 @@ struct wlr_compositor {
 	} events;
 };
 
-void wlr_compositor_destroy(struct wlr_compositor *wlr_compositor);
 struct wlr_compositor *wlr_compositor_create(struct wl_display *display,
 	struct wlr_renderer *renderer);
 

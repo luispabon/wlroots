@@ -9,13 +9,13 @@
 #ifndef WLR_TYPES_WLR_FOREIGN_TOPLEVEL_MANAGEMENT_V1_H
 #define WLR_TYPES_WLR_FOREIGN_TOPLEVEL_MANAGEMENT_V1_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_output.h>
 
 struct wlr_foreign_toplevel_manager_v1 {
 	struct wl_event_loop *event_loop;
 	struct wl_global *global;
-	struct wl_list resources;
+	struct wl_list resources; // wl_resource_get_link
 	struct wl_list toplevels; // wlr_foreign_toplevel_handle_v1::link
 
 	struct wl_listener display_destroy;
@@ -101,8 +101,6 @@ struct wlr_foreign_toplevel_handle_v1_set_rectangle_event {
 
 struct wlr_foreign_toplevel_manager_v1 *wlr_foreign_toplevel_manager_v1_create(
 	struct wl_display *display);
-void wlr_foreign_toplevel_manager_v1_destroy(
-	struct wlr_foreign_toplevel_manager_v1 *manager);
 
 struct wlr_foreign_toplevel_handle_v1 *wlr_foreign_toplevel_handle_v1_create(
 	struct wlr_foreign_toplevel_manager_v1 *manager);

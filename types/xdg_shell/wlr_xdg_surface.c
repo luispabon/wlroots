@@ -41,6 +41,10 @@ void unmap_xdg_surface(struct wlr_xdg_surface *surface) {
 
 	switch (surface->role) {
 	case WLR_XDG_SURFACE_ROLE_TOPLEVEL:
+		if (surface->toplevel->parent) {
+			wl_list_remove(&surface->toplevel->parent_unmap.link);
+			surface->toplevel->parent = NULL;
+		}
 		free(surface->toplevel->title);
 		surface->toplevel->title = NULL;
 		free(surface->toplevel->app_id);
@@ -92,6 +96,9 @@ void unmap_xdg_surface(struct wlr_xdg_surface *surface) {
 static void xdg_surface_handle_ack_configure(struct wl_client *client,
 		struct wl_resource *resource, uint32_t serial) {
 	struct wlr_xdg_surface *surface = wlr_xdg_surface_from_resource(resource);
+	if (surface == NULL) {
+		return;
+	}
 
 	if (surface->role == WLR_XDG_SURFACE_ROLE_NONE) {
 		wl_resource_post_error(surface->resource,
@@ -100,16 +107,12 @@ static void xdg_surface_handle_ack_configure(struct wl_client *client,
 		return;
 	}
 
+	// First find the ack'ed configure
 	bool found = false;
 	struct wlr_xdg_surface_configure *configure, *tmp;
-	wl_list_for_each_safe(configure, tmp, &surface->configure_list, link) {
-		if (configure->serial < serial) {
-			wlr_signal_emit_safe(&surface->events.ack_configure, configure);
-			xdg_surface_configure_destroy(configure);
-		} else if (configure->serial == serial) {
+	wl_list_for_each(configure, &surface->configure_list, link) {
+		if (configure->serial == serial) {
 			found = true;
-			break;
-		} else {
 			break;
 		}
 	}
@@ -118,6 +121,14 @@ static void xdg_surface_handle_ack_configure(struct wl_client *client,
 			XDG_WM_BASE_ERROR_INVALID_SURFACE_STATE,
 			"wrong configure serial: %u", serial);
 		return;
+	}
+	// Then remove old configures from the list
+	wl_list_for_each_safe(configure, tmp, &surface->configure_list, link) {
+		if (configure->serial == serial) {
+			break;
+		}
+		wlr_signal_emit_safe(&surface->events.ack_configure, configure);
+		xdg_surface_configure_destroy(configure);
 	}
 
 	switch (surface->role) {
@@ -230,8 +241,13 @@ static void xdg_surface_handle_get_popup(struct wl_client *client,
 		struct wl_resource *positioner_resource) {
 	struct wlr_xdg_surface *xdg_surface =
 		wlr_xdg_surface_from_resource(resource);
-	struct wlr_xdg_surface *parent =
-		wlr_xdg_surface_from_resource(parent_resource);
+	struct wlr_xdg_surface *parent = NULL;
+	if (parent_resource != NULL) {
+		parent = wlr_xdg_surface_from_resource(parent_resource);
+	}
+	if (xdg_surface == NULL) {
+		return; // TODO: create an inert xdg_popup
+	}
 	struct wlr_xdg_positioner_resource *positioner =
 		get_xdg_positioner_from_resource(positioner_resource);
 	create_xdg_popup(xdg_surface, parent, positioner, id);
@@ -241,6 +257,9 @@ static void xdg_surface_handle_get_toplevel(struct wl_client *client,
 		struct wl_resource *resource, uint32_t id) {
 	struct wlr_xdg_surface *xdg_surface =
 		wlr_xdg_surface_from_resource(resource);
+	if (xdg_surface == NULL) {
+		return; // TODO: create an inert xdg_toplevel
+	}
 	create_xdg_toplevel(xdg_surface, id);
 }
 
@@ -248,6 +267,9 @@ static void xdg_surface_handle_set_window_geometry(struct wl_client *client,
 		struct wl_resource *resource, int32_t x, int32_t y, int32_t width,
 		int32_t height) {
 	struct wlr_xdg_surface *surface = wlr_xdg_surface_from_resource(resource);
+	if (surface == NULL) {
+		return;
+	}
 
 	if (surface->role == WLR_XDG_SURFACE_ROLE_NONE) {
 		wl_resource_post_error(surface->resource,
@@ -273,6 +295,9 @@ static void xdg_surface_handle_set_window_geometry(struct wl_client *client,
 static void xdg_surface_handle_destroy(struct wl_client *client,
 		struct wl_resource *resource) {
 	struct wlr_xdg_surface *surface = wlr_xdg_surface_from_resource(resource);
+	if (surface == NULL) {
+		return;
+	}
 
 	if (surface->role != WLR_XDG_SURFACE_ROLE_NONE) {
 		wlr_log(WLR_ERROR, "Tried to destroy an xdg_surface before its role "
@@ -498,10 +523,6 @@ void destroy_xdg_surface(struct wlr_xdg_surface *surface) {
 
 struct wlr_xdg_surface *wlr_xdg_surface_from_resource(
 		struct wl_resource *resource) {
-	// TODO: Double check that all of the callers can deal with NULL
-	if (!resource) {
-		return NULL;
-	}
 	assert(wl_resource_instance_of(resource, &xdg_surface_interface,
 		&xdg_surface_implementation));
 	return wl_resource_get_user_data(resource);

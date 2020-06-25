@@ -14,7 +14,7 @@
 #ifndef WLR_TYPES_WLR_XDG_SHELL_V6_H
 #define WLR_TYPES_WLR_XDG_SHELL_V6_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_box.h>
 #include <wlr/types/wlr_seat.h>
 #include "xdg-shell-unstable-v6-protocol.h"
@@ -95,6 +95,7 @@ struct wlr_xdg_popup_grab_v6 {
 	struct wl_client *client;
 	struct wlr_seat_pointer_grab pointer_grab;
 	struct wlr_seat_keyboard_grab keyboard_grab;
+	struct wlr_seat_touch_grab touch_grab;
 	struct wlr_seat *seat;
 	struct wl_list popups;
 	struct wl_list link; // wlr_xdg_shell_v6::popup_grabs
@@ -242,7 +243,6 @@ struct wlr_xdg_toplevel_v6_show_window_menu_event {
 };
 
 struct wlr_xdg_shell_v6 *wlr_xdg_shell_v6_create(struct wl_display *display);
-void wlr_xdg_shell_v6_destroy(struct wlr_xdg_shell_v6 *xdg_shell);
 
 /**
  * Send a ping to the surface. If the surface does not respond in a reasonable

@@ -10,7 +10,7 @@
 #define WLR_TYPES_WLR_LAYER_SHELL_V1_H
 #include <stdbool.h>
 #include <stdint.h>
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_box.h>
 #include <wlr/types/wlr_surface.h>
 #include "wlr-layer-shell-unstable-v1-protocol.h"
@@ -29,7 +29,6 @@
  */
 struct wlr_layer_shell_v1 {
 	struct wl_global *global;
-	struct wl_list resources; // wl_resource
 	struct wl_list surfaces; // wl_layer_surface
 
 	struct wl_listener display_destroy;
@@ -54,6 +53,7 @@ struct wlr_layer_surface_v1_state {
 	bool keyboard_interactive;
 	uint32_t desired_width, desired_height;
 	uint32_t actual_width, actual_height;
+	enum zwlr_layer_shell_v1_layer layer;
 };
 
 struct wlr_layer_surface_v1_configure {
@@ -71,7 +71,6 @@ struct wlr_layer_surface_v1 {
 	struct wl_list popups; // wlr_xdg_popup::link
 
 	char *namespace;
-	enum zwlr_layer_shell_v1_layer layer;
 
 	bool added, configured, mapped, closed;
 	uint32_t configure_serial;
@@ -87,9 +86,30 @@ struct wlr_layer_surface_v1 {
 	struct wl_listener surface_destroy;
 
 	struct {
+		/**
+		 * The destroy signal indicates that the wlr_layer_surface is about to be
+		 * freed. It is guaranteed that the unmap signal is raised before the destroy
+		 * signal if the layer surface is destroyed while mapped.
+		 */
 		struct wl_signal destroy;
+		/**
+		 * The map signal indicates that the client has configured itself and is
+		 * ready to be rendered by the compositor.
+		 */
 		struct wl_signal map;
+		/**
+		 * The unmap signal indicates that the surface is no longer in a state where
+		 * it should be rendered by the compositor. This might happen if the surface
+		 * no longer has a displayable buffer because either the surface has been
+		 * hidden or is about to be destroyed. It is guaranteed that the unmap signal
+		 * is raised before the destroy signal if the layer surface is destroyed
+		 * while mapped.
+		 */
 		struct wl_signal unmap;
+		/**
+		 * The new_popup signal is raised when a new popup is created. The data
+		 * parameter passed to the listener is a pointer to the new wlr_xdg_popup.
+		 */
 		struct wl_signal new_popup;
 	} events;
 
@@ -97,7 +117,6 @@ struct wlr_layer_surface_v1 {
 };
 
 struct wlr_layer_shell_v1 *wlr_layer_shell_v1_create(struct wl_display *display);
-void wlr_layer_shell_v1_destroy(struct wlr_layer_shell_v1 *layer_shell);
 
 /**
  * Notifies the layer surface to configure itself with this width/height. The

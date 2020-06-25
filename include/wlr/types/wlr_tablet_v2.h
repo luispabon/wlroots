@@ -9,7 +9,7 @@
 #ifndef WLR_TYPES_WLR_TABLET_V2_H
 #define WLR_TYPES_WLR_TABLET_V2_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_seat.h>
 #include <wlr/types/wlr_input_device.h>
 
@@ -141,7 +141,6 @@ struct wlr_tablet_v2_tablet_tool *wlr_tablet_tool_create(
 	struct wlr_tablet_tool *wlr_tool);
 
 struct wlr_tablet_manager_v2 *wlr_tablet_v2_create(struct wl_display *display);
-void wlr_tablet_v2_destroy(struct wlr_tablet_manager_v2 *manager);
 
 void wlr_send_tablet_v2_tablet_tool_proximity_in(
 	struct wlr_tablet_v2_tablet_tool *tool,
@@ -254,6 +253,8 @@ void wlr_tablet_tool_v2_end_grab(struct wlr_tablet_v2_tablet_tool *tool);
 
 void wlr_tablet_tool_v2_start_implicit_grab(struct wlr_tablet_v2_tablet_tool *tool);
 
+bool wlr_tablet_tool_v2_has_implicit_grab(
+	struct wlr_tablet_v2_tablet_tool *tool);
 
 uint32_t wlr_send_tablet_v2_tablet_pad_enter(
 	struct wlr_tablet_v2_tablet_pad *pad,

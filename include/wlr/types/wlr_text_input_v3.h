@@ -9,9 +9,15 @@
 #ifndef WLR_TYPES_WLR_TEXT_INPUT_V3_H
 #define WLR_TYPES_WLR_TEXT_INPUT_V3_H
 
-#include <wayland-server.h>
+#include <wayland-server-core.h>
 #include <wlr/types/wlr_seat.h>
 #include <wlr/types/wlr_surface.h>
+
+enum wlr_text_input_v3_features {
+	WLR_TEXT_INPUT_V3_FEATURE_SURROUNDING_TEXT = 1 << 0,
+	WLR_TEXT_INPUT_v3_FEATURE_CONTENT_TYPE = 1 << 1,
+	WLR_TEXT_INPUT_V3_FEATURE_CURSOR_RECTANGLE = 1 << 2,
+};
 
 struct wlr_text_input_v3_state {
 	struct {
@@ -33,6 +39,10 @@ struct wlr_text_input_v3_state {
 		int32_t width;
 		int32_t height;
 	} cursor_rectangle;
+
+	// Tracks which features were used in the current commit.
+	// Useful in the enabling commit, where usage means support.
+	uint32_t features; // OR'ed wlr_text_input_v3_features
 };
 
 struct wlr_text_input_v3 {
@@ -44,6 +54,8 @@ struct wlr_text_input_v3 {
 	uint32_t current_serial; // next in line to send
 	bool pending_enabled;
 	bool current_enabled;
+	// supported in the current text input, more granular than surface
+	uint32_t active_features; // OR'ed wlr_text_input_v3_features
 
 	struct wl_list link;
 
@@ -60,8 +72,6 @@ struct wlr_text_input_v3 {
 
 struct wlr_text_input_manager_v3 {
 	struct wl_global *global;
-
-	struct wl_list bound_resources; // struct wl_resource*::link
 	struct wl_list text_inputs; // struct wlr_text_input_v3::resource::link
 
 	struct wl_listener display_destroy;
@@ -74,8 +84,6 @@ struct wlr_text_input_manager_v3 {
 
 struct wlr_text_input_manager_v3 *wlr_text_input_manager_v3_create(
 	struct wl_display *wl_display);
-void wlr_text_input_manager_v3_destroy(
-	struct wlr_text_input_manager_v3 *manager);
 
 // Sends enter to the surface and saves it
 void wlr_text_input_v3_send_enter(struct wlr_text_input_v3 *text_input,
@@ -90,4 +98,5 @@ void wlr_text_input_v3_send_delete_surrounding_text(
 	struct wlr_text_input_v3 *text_input, uint32_t before_length,
 	uint32_t after_length);
 void wlr_text_input_v3_send_done(struct wlr_text_input_v3 *text_input);
+
 #endif
