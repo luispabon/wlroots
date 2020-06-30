@@ -11,4 +11,4 @@ Section: debug
 Priority: optional
 Multi-Arch: same
 Description: debug symbols for libwlroots5
-Build-Ids: 29481e6fff440cfecd41d9f7909bba027e822eaa
+Build-Ids: 03f14356d1cfb492568c964c823813890fb2a928

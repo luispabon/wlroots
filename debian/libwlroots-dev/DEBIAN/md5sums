@@ -12,7 +12,7 @@ bac6765079d151225f5ccfb41b5d298a  usr/include/wlr/backend/wayland.h
 02bd98d027fe1d05b16c1640737e7a5c  usr/include/wlr/config.h
 54d8989a8dd327b719b7511b3363e21e  usr/include/wlr/interfaces/wlr_input_device.h
 db669eeecfd6318f5da7fcc17130fed5  usr/include/wlr/interfaces/wlr_keyboard.h
-7e3e0c19bf23c95176f50295a4c94b6b  usr/include/wlr/interfaces/wlr_output.h
+e88442b49bffe216981b6f9f59a183ed  usr/include/wlr/interfaces/wlr_output.h
 50bdc64f42ba426bb685c3883a7b92fb  usr/include/wlr/interfaces/wlr_pointer.h
 d0cb6d0ecee6ba5ed4739dfebe123fd6  usr/include/wlr/interfaces/wlr_switch.h
 da37ad6dc65dce58b3db08f25a502a88  usr/include/wlr/interfaces/wlr_tablet_pad.h
