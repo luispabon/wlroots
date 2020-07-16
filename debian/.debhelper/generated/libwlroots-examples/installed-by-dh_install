@@ -1,17 +1,9 @@
-./build/examples/idle
 ./obj-x86_64-linux-gnu/examples/idle
-./build/examples/multi-pointer
 ./obj-x86_64-linux-gnu/examples/multi-pointer
-./build/examples/output-layout
 ./obj-x86_64-linux-gnu/examples/output-layout
-./build/examples/pointer
 ./obj-x86_64-linux-gnu/examples/pointer
-./build/examples/rotation
 ./obj-x86_64-linux-gnu/examples/rotation
 ./obj-x86_64-linux-gnu/examples/screencopy
-./build/examples/simple
 ./obj-x86_64-linux-gnu/examples/simple
-./build/examples/tablet
 ./obj-x86_64-linux-gnu/examples/tablet
-./build/examples/touch
 ./obj-x86_64-linux-gnu/examples/touch

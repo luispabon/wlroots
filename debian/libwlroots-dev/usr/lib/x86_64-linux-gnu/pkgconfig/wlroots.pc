@@ -4,7 +4,7 @@ includedir=${prefix}/include
 
 Name: wlroots
 Description: Wayland compositor library
-Version: 0.10.0
+Version: 0.11.0
 Requires.private: wayland-server >= 1.18, wayland-client, wayland-egl, wayland-protocols >= 1.17, egl, glesv2, libdrm >= 2.4.95, gbm >= 17.1.0, libinput >= 1.9.0, xkbcommon, libudev, pixman-1, x11-xcb, xcb, xcb-xinput, xcb-xfixes, libsystemd >= 237, xcb-composite, xcb-render, xcb-icccm
 Libs: -L${libdir} -lwlroots
 Libs.private: -lm -lrt

@@ -1,3 +1,9 @@
+wlroots (0.11.0-luis1) disco; urgency=low
+
+  * wlroots 0.11.0
+
+ -- Luis Pabon <luis.pabon@auronconsulting.co.uk>  Thu, 16 Jul 2020 09:47:10 +0400
+
 wlroots (0.10.99-luis1) disco; urgency=low
 
   * wlroots pre 0.11

@@ -40,11 +40,11 @@ d149a548e6a4086c58695bcc6c130a55  usr/include/wlr/types/wlr_foreign_toplevel_man
 85a105c303c5c63b02136a5c277efec5  usr/include/wlr/types/wlr_idle_inhibit_v1.h
 0c58e23a530d5b5a8fb7416b60e6ebe7  usr/include/wlr/types/wlr_input_device.h
 6255780ee3744548fdaaf9fc43e85aec  usr/include/wlr/types/wlr_input_inhibitor.h
-a4a42e4f651e4ec99a9b1e1a51462dab  usr/include/wlr/types/wlr_input_method_v2.h
+b981726f7e2f06e81e5556f3b2a7c54d  usr/include/wlr/types/wlr_input_method_v2.h
 8fae7b2123cac3b4166fcf6c50d58a73  usr/include/wlr/types/wlr_keyboard.h
 87ce7f7ac757d7b2d0b7275536d28dfb  usr/include/wlr/types/wlr_keyboard_group.h
 b1d7200ad1f54553f9b7aab4c0f6963c  usr/include/wlr/types/wlr_keyboard_shortcuts_inhibit_v1.h
-223d76ca432aa260cc5c14c78347d534  usr/include/wlr/types/wlr_layer_shell_v1.h
+60b7ad6a66a26ac4b8a25f403ef08392  usr/include/wlr/types/wlr_layer_shell_v1.h
 0c44129a896bbc82e2dced439c149688  usr/include/wlr/types/wlr_linux_dmabuf_v1.h
 6b266f8032c889da8e6f94664b72e470  usr/include/wlr/types/wlr_list.h
 f0066ad0691754cc00b598b5af4e078c  usr/include/wlr/types/wlr_matrix.h
@@ -62,7 +62,7 @@ ec807521244dcf2d4ea24621944d7eb2  usr/include/wlr/types/wlr_output_management_v1
 34a71b9572fef648457877590b89fe66  usr/include/wlr/types/wlr_region.h
 aea1081645a7e3ea00be55c814875b04  usr/include/wlr/types/wlr_relative_pointer_v1.h
 3f5d85e1a0fda8691d3e58a78c418552  usr/include/wlr/types/wlr_screencopy_v1.h
-efc58643caa51ae470448d8ea1ecac5b  usr/include/wlr/types/wlr_seat.h
+2843121eea0a7eec8f6a7b919dcb65cb  usr/include/wlr/types/wlr_seat.h
 b5a1b87c516728628b4dc5ea5844fbde  usr/include/wlr/types/wlr_server_decoration.h
 ead3a97dca8061756c332e9985cf73a5  usr/include/wlr/types/wlr_surface.h
 d1204d9da655c41cc605447244441ea8  usr/include/wlr/types/wlr_switch.h
@@ -72,7 +72,7 @@ a8eccba4ea5a04234a0ebdbc4f224cde  usr/include/wlr/types/wlr_tablet_v2.h
 41ab129eaca3e934a8fb7fc48d9cd00e  usr/include/wlr/types/wlr_text_input_v3.h
 53a79b15c06ab0bf6654ac828d1a1519  usr/include/wlr/types/wlr_touch.h
 e1a14d09de9914bded80118f50ad317e  usr/include/wlr/types/wlr_viewporter.h
-9e5aaf765cab6297254b27ed53a3d6f5  usr/include/wlr/types/wlr_virtual_keyboard_v1.h
+f46797d819e9aa17b9640e8d14b214e5  usr/include/wlr/types/wlr_virtual_keyboard_v1.h
 d9c4a0b0a3d2446de0ceafed443d19c0  usr/include/wlr/types/wlr_virtual_pointer_v1.h
 3d24f717a691de4e3a3d4300ebd52a44  usr/include/wlr/types/wlr_xcursor_manager.h
 c57ac67d25f27b88c88729e0cd98f869  usr/include/wlr/types/wlr_xdg_decoration_v1.h
@@ -82,9 +82,9 @@ f0fb8ea562ff7b3fa166f304fc456b0f  usr/include/wlr/types/wlr_xdg_shell.h
 479f9fc9d3b74d806a1add9ac39c78d1  usr/include/wlr/util/edges.h
 d85f8250dc2f884683fa635520412060  usr/include/wlr/util/log.h
 aad484d3f4e16c4040986d9dc8493f48  usr/include/wlr/util/region.h
-b9def6a0137930aec04921165cf68035  usr/include/wlr/version.h
+0ecf295548931f736e5e14fbbe872813  usr/include/wlr/version.h
 076f01494e9d27ae10d241290b7a96c8  usr/include/wlr/xcursor.h
 b7bfff0282919859509280cdc4bb7e94  usr/include/wlr/xwayland.h
-08032562160185534ddc2b7ccc7a5177  usr/lib/x86_64-linux-gnu/pkgconfig/wlroots.pc
-5fe6df8ed686416c66330fd6cc35180b  usr/share/doc/libwlroots-dev/changelog.Debian.gz
+90fa6579f1da1bc616980838157fffa0  usr/lib/x86_64-linux-gnu/pkgconfig/wlroots.pc
+f37f1482028842a66181f593d65a659e  usr/share/doc/libwlroots-dev/changelog.Debian.gz
 3007393f194b46eb8a66e087b6a67292  usr/share/doc/libwlroots-dev/copyright
