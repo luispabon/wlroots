@@ -800,7 +800,7 @@ bool drm_connector_set_mode(struct wlr_drm_connector *conn,
 		return false;
 	}
 
-	wlr_log(WLR_INFO, "Modesetting '%s' with '%ux%u@%u mHz'",
+	wlr_log(WLR_INFO, "Modesetting '%s' with '%" PRId32 "x%" PRId32 "@%" PRId32 "mHz'",
 		conn->output.name, wlr_mode->width, wlr_mode->height,
 		wlr_mode->refresh);
 
@@ -1398,7 +1398,7 @@ void scan_drm_connectors(struct wlr_drm_backend *drm) {
 			bool is_mst = false;
 			char *path = get_drm_prop_blob(drm->fd, wlr_conn->id,
 				wlr_conn->props.path, &path_len);
-			if (path_len > 4 && path && strncmp(path, "mst:", 4) == 0) {
+			if (path && path_len > 4 && strncmp(path, "mst:", 4) == 0) {
 				is_mst = true;
 			}
 			free(path);
